@@ -9,7 +9,7 @@ website on our server.</b>
 
 ## Table of Contents 
 0. [The Console](#the-console)
-1. [Project Strurcture](#project-strurcture)
+1. [Project Strurcture](#project-structure)
 2. [Class Hierarchy in AirBnB Backend System](#class-hierarchy)
 3. [How to use The Console](#how-to-use)
 4. [How to Install and Run The Console](#how-to-install)
@@ -36,7 +36,10 @@ The console will be a tool to validate this storage engine as the figure:
     <img src="https://drive.google.com/uc?export=view&id=1Nq8qsHpLmrY6hihJdZaRTjoJWWnXWL6C" alt="The console">
 </figure>
 
-## Project structure <a name='project-structure'></a>
+<h2>
+    <a id='project-structure'>Project structure</a>
+</h2>
+
 
 ```
 ├── AUTHORS
@@ -71,8 +74,9 @@ The console will be a tool to validate this storage engine as the figure:
         └── test_user.py
 ```
 
-
-## Class Hierarchy in AirBnB Backend System <a name='class-hierarchy'></a>
+<h2>
+    <a id='class-hierarchy'>Class Hierarchy in AirBnB Backend System </a>
+</h2>
 
 The AirBnB backend system employs a structured class hierarchy centered around the foundational `BaseModel` class. Derived classes, including `User`, `State`, `City`, `Amenity`, `Place`, and `Review`, represent distinct entities within the application, such as users, geographic locations, amenities, rental properties, and user reviews. This interconnected model forms the backbone of the backend, providing a systematic framework for managing and organizing essential data in the AirBnB platform.
 
@@ -121,7 +125,9 @@ Prints the string representation of **all instances based on the provided class 
 
 Feel free to explore the capabilities of the console and manage instances seamlessly.
 
-## How to Install and Run The Console <a name='how-to-install'></a>
+<h2>
+    <a id='how-to-install'>How to Install and Run The Console</a>
+</h2>
 
 To install and run the AirBnB clone - The Console project, follow these simple steps:
 
@@ -148,12 +154,16 @@ Once the console is running, explore the available commands such as `create`, `s
 ### 5- Interact with the Backend:
 Utilize the provided classes (`User`, `State`, `City`, `Amenity`, `Place`, and `Review`) to manage entities within the AirBnB system. Follow the described rules and functionalities to create, read, update, and delete instances.
 
-## How to contribute to the project <a name='how-to-contribute'></a>
+<h2>
+    <a id='how-to-contribute'>How to contribute to the project</a>
+</h2>
 
 We welcome contributions from the community to enhance the AirBnB clone project. Here's how you can contribute:
 Fork the Repository, clone your forked repository to your local machine, and implement your changes and improvements in the code. Ensure that your modifications align with the project's coding standards, and eventually open a pull request from your fork to the original repository. Provide a detailed description of your changes and improvements.
 And once your contribution is reviewed and approved, it will be merged into the main project. Congratulations on your successful contribution!
 
-<a name='license'></a>
+<h2>
+    <a id='license'>License</a>
+</h2>
 ## License 
 The AirBnB clone project is open-source and released under the MIT License. This license grants permission to anyone to use, modify, and distribute the software, subject to the conditions outlined in the license agreement.
