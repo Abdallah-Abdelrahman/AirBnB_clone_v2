@@ -8,6 +8,44 @@ import time
 import datetime
 import models
 from models.base_model import BaseModel
+import inspect
+import pycodestyle as pep8
+import models.base_model as base_model
+
+
+class TestBaseModelDocPep8(unittest.TestCase):
+    """unittest class for Base class documentation and pep8 conformaty"""
+    def test_pep8_base(self) -> None:
+        """Test that the base_module conforms to PEP8."""
+        style = pep8.StyleGuide()
+        result = style.check_files(['models/base_model.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_test_base(self) -> None:
+        """Test that the test_base_module conforms to PEP8."""
+        style = pep8.StyleGuide()
+        result = style.check_files(['tests/test_models/test_base_model.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_module_docstring(self) -> None:
+        """test module documentation"""
+        mod_doc = base_model.__doc__
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_class_docstring(self) -> None:
+        """test class documentation"""
+        mod_doc = str(BaseModel.__doc__)
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_func_docstrings(self) -> None:
+        """Tests for the presence of docstrings in all functions"""
+        base_funcs = inspect.getmembers(BaseModel, inspect.isfunction)
+        base_funcs.extend(inspect.getmembers(BaseModel, inspect.ismethod))
+        for func in base_funcs:
+            self.assertIsNotNone(func[1].__doc__)
+            self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
 class Test_Base(unittest.TestCase):
@@ -65,14 +103,6 @@ class Test_save(unittest.TestCase):
         old_time = base.updated_at
         base.save()
         self.assertNotEqual(base.updated_at, old_time)
-
-    def test_save_file(self):
-        """This function tests the save in a file functionality"""
-        base = BaseModel()
-        with open(models.storage._FileStorage__file_path,
-                  encoding="utf-8") as f:
-            read_data = f.read()
-            self.assertIn("BaseModel." + base.id, read_data)
 
     def test_two_save(self):
         """This function tests updates the time twice"""

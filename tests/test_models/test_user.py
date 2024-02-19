@@ -8,6 +8,44 @@ import time
 import datetime
 from models.user import User
 import models
+import inspect
+import pycodestyle as pep8
+import models.user as user_model
+
+
+class TestUserDocPep8(unittest.TestCase):
+    """unittest class for Base class documentation and pep8 conformaty"""
+    def test_pep8_user(self) -> None:
+        """Test that the user_module conforms to PEP8."""
+        style = pep8.StyleGuide(quiet=True)
+        result = style.check_files(['models/user.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_test_user(self) -> None:
+        """Test that the test_user_module conforms to PEP8."""
+        style = pep8.StyleGuide(quiet=True)
+        result = style.check_files(['tests/test_models/test_user.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_module_docstring(self) -> None:
+        """test module documentation"""
+        mod_doc = user_model.__doc__
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_class_docstring(self) -> None:
+        """test class documentation"""
+        mod_doc = str(User.__doc__)
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_func_docstrings(self) -> None:
+        """Tests for the presence of docstrings in all functions"""
+        user_funcs = inspect.getmembers(User, inspect.isfunction)
+        user_funcs.extend(inspect.getmembers(User, inspect.ismethod))
+        for func in user_funcs:
+            self.assertIsNotNone(func[1].__doc__)
+            self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
 class Test_user_attr(unittest.TestCase):

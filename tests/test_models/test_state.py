@@ -8,6 +8,44 @@ import time
 import datetime
 import models
 from models.state import State
+import inspect
+import pycodestyle as pep8
+import models.state as state_model
+
+
+class TestStateDocPep8(unittest.TestCase):
+    """unittest class for Base class documentation and pep8 conformaty"""
+    def test_pep8_state(self) -> None:
+        """Test that the state_module conforms to PEP8."""
+        style = pep8.StyleGuide(quiet=True)
+        result = style.check_files(['models/state.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_test_state(self) -> None:
+        """Test that the test_state_module conforms to PEP8."""
+        style = pep8.StyleGuide(quiet=True)
+        result = style.check_files(['tests/test_models/test_state.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_module_docstring(self) -> None:
+        """test module documentation"""
+        mod_doc = state_model.__doc__
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_class_docstring(self) -> None:
+        """test class documentation"""
+        mod_doc = str(State.__doc__)
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_func_docstrings(self) -> None:
+        """Tests for the presence of docstrings in all functions"""
+        state_funcs = inspect.getmembers(State, inspect.isfunction)
+        state_funcs.extend(inspect.getmembers(State, inspect.ismethod))
+        for func in state_funcs:
+            self.assertIsNotNone(func[1].__doc__)
+            self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
 class Test_state_attr(unittest.TestCase):

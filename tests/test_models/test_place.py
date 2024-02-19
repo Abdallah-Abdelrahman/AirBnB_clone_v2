@@ -10,6 +10,44 @@ import uuid
 import models
 from unittest.mock import patch
 from models.place import Place
+import inspect
+import pycodestyle as pep8
+import models.place as place_model
+
+
+class TestPlaceDocPep8(unittest.TestCase):
+    """unittest class for Base class documentation and pep8 conformaty"""
+    def test_pep8_place(self) -> None:
+        """Test that the place_module conforms to PEP8."""
+        style = pep8.StyleGuide(quiet=True)
+        result = style.check_files(['models/place.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_test_place(self) -> None:
+        """Test that the test_place_module conforms to PEP8."""
+        style = pep8.StyleGuide(quiet=True)
+        result = style.check_files(['tests/test_models/test_place.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_module_docstring(self) -> None:
+        """test module documentation"""
+        mod_doc = place_model.__doc__
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_class_docstring(self) -> None:
+        """test class documentation"""
+        mod_doc = str(Place.__doc__)
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_func_docstrings(self) -> None:
+        """Tests for the presence of docstrings in all functions"""
+        place_funcs = inspect.getmembers(Place, inspect.isfunction)
+        place_funcs.extend(inspect.getmembers(Place, inspect.ismethod))
+        for func in place_funcs:
+            self.assertIsNotNone(func[1].__doc__)
+            self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
 class Test_Place(unittest.TestCase):

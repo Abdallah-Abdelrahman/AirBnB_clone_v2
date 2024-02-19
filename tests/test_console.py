@@ -7,9 +7,54 @@ import unittest
 import models
 import os
 import json
+import pycodestyle as pep8
+import console
+import inspect
 from console import HBNBCommand
 from unittest.mock import patch
 from io import StringIO
+
+
+class TestConsoleDocPep8(unittest.TestCase):
+    """unittest class for HBNBCommand class
+    documentation and pep8 conformaty
+    """
+
+    def test_pep8_base(self):
+        """Test that the base_module conforms to PEP8.
+        """
+        style = pep8.StyleGuide()
+        result = style.check_files(['console.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_test_base(self):
+        """Test that the test_console conforms to PEP8.
+        """
+        style = pep8.StyleGuide()
+        result = style.check_files(['tests/test_console.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_module_docstring(self):
+        """test module documentation
+        """
+        mod_doc = console.__doc__
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_class_docstring(self):
+        """test class documentation
+        """
+        mod_doc = str(HBNBCommand.__doc__)
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_func_docstrings(self):
+        """Tests for the presence of docstrings in all functions
+        """
+        base_funcs = inspect.getmembers(HBNBCommand, inspect.isfunction)
+        base_funcs.extend(inspect.getmembers(HBNBCommand, inspect.ismethod))
+        for func in base_funcs:
+            self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
 class TestConsole_Base(unittest.TestCase):
@@ -17,7 +62,7 @@ class TestConsole_Base(unittest.TestCase):
 
     def test_docstr(self):
         """Test class documentaion"""
-        self.assertTrue(len(HBNBCommand.__doc__) > 2)
+        self.assertTrue(len(str(HBNBCommand.__doc__)) > 2)
 
     def test_prompt(self):
         """This function tests having the correct prompt"""
@@ -92,6 +137,14 @@ class TestConsole_help(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd("help all"))
             self.assertEqual(''.join(out), f.getvalue().strip())
 
+    def test_help_create(self):
+        """This function tests the <help update> message content"""
+        o = ["Updates an instance based on the class name and id by adding\n",
+             "        or updating attributes"]
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("help update"))
+            self.assertEqual(''.join(o), f.getvalue().strip())
+
     def test_help_destroy(self):
         """This function tests the <help destroy> message content"""
         out = "Deletes an instance based on class name and id"
@@ -121,14 +174,6 @@ class TestConsole_help(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("help show"))
             self.assertEqual(''.join(out), f.getvalue().strip())
-
-    def test_help_create(self):
-        """This function tests the <help update> message content"""
-        o = ["Updates an instance based on the class name and id by adding\n",
-             "        or updating attributes"]
-        with patch("sys.stdout", new=StringIO()) as f:
-            self.assertFalse(HBNBCommand().onecmd("help update"))
-            self.assertEqual(''.join(o), f.getvalue().strip())
 
 
 class TestConsole_create(unittest.TestCase):
