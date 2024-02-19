@@ -2,16 +2,37 @@
 '''Module defines State'''
 
 from models.base_model import BaseModel
+from models.base_model import Base
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
+from models.city import City
+from typing import List
+from os import getenv
 
 
-class State(BaseModel):
+db = (False, True)['db' == getenv("HBNB_TYPE_STORAGE")]
+
+
+class State(BaseModel, Base):
     '''State class
 
     Atrrs:
         name(str):
     '''
-    name = ''
+    __tablename__ = "states"
+    if db:
+        name = Column(String(128), nullable=False)
+        cities = relationship("City", cascade="all, delete-orphan",
+                              backref="state")
+    else:
+        name = ""
 
-    def __init__(self, *args, **kwargs):
-        '''Initiliaztion'''
-        super().__init__(*args, **kwargs)
+    @property
+    def cities(self) -> List:
+        """cities getter attribute"""
+        from models import storage
+        cities = storage.all(City).copy()
+        for k, v in cities.items():
+            if v.state_id != self.id:
+                del cities[k]
+        return list(cities.values())
