@@ -117,8 +117,7 @@ class Test_creating_objs(unittest.TestCase):
 
     def test_all_args(self):
         """This function tests the all method with an argument"""
-        with self.assertRaises(TypeError):
-            models.storage.all("args")
+        self.assertIs(type(models.storage.all(State)), dict)
 
     def test_all_dict(self):
         """This function tests all method dictionary"""
