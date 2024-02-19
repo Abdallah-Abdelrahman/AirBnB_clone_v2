@@ -7,6 +7,44 @@ import unittest
 import datetime
 import models
 from models.amenity import Amenity
+import inspect
+import pycodestyle as pep8
+import models.amenity as amenity_model
+
+
+class TestAmenityDocPep8(unittest.TestCase):
+    """unittest class for Base class documentation and pep8 conformaty"""
+    def test_pep8_amenity(self) -> None:
+        """Test that the amenity_module conforms to PEP8."""
+        style = pep8.StyleGuide()
+        result = style.check_files(['models/amenity.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_test_amenity(self) -> None:
+        """Test that the test_amenity_module conforms to PEP8."""
+        style = pep8.StyleGuide()
+        result = style.check_files(['tests/test_models/test_amenity.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_module_docstring(self) -> None:
+        """test module documentation"""
+        mod_doc = amenity_model.__doc__
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_class_docstring(self) -> None:
+        """test class documentation"""
+        mod_doc = str(Amenity.__doc__)
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_func_docstrings(self) -> None:
+        """Tests for the presence of docstrings in all functions"""
+        amenity_funcs = inspect.getmembers(Amenity, inspect.isfunction)
+        amenity_funcs.extend(inspect.getmembers(Amenity, inspect.ismethod))
+        for func in amenity_funcs:
+            self.assertIsNotNone(func[1].__doc__)
+            self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
 class Test_Amenity(unittest.TestCase):

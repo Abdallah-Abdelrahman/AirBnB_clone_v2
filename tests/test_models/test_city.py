@@ -10,6 +10,44 @@ import uuid
 import models
 from unittest.mock import patch
 from models.city import City
+import inspect
+import pycodestyle as pep8
+import models.city as city_model
+
+
+class TestCityDocPep8(unittest.TestCase):
+    """unittest class for Base class documentation and pep8 conformaty"""
+    def test_pep8_city(self) -> None:
+        """Test that the city_module conforms to PEP8."""
+        style = pep8.StyleGuide(quiet=True)
+        result = style.check_files(['models/city.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_test_city(self) -> None:
+        """Test that the test_city_module conforms to PEP8."""
+        style = pep8.StyleGuide(quiet=True)
+        result = style.check_files(['tests/test_models/test_city.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_module_docstring(self) -> None:
+        """test module documentation"""
+        mod_doc = city_model.__doc__
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_class_docstring(self) -> None:
+        """test class documentation"""
+        mod_doc = str(City.__doc__)
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_func_docstrings(self) -> None:
+        """Tests for the presence of docstrings in all functions"""
+        city_funcs = inspect.getmembers(City, inspect.isfunction)
+        city_funcs.extend(inspect.getmembers(City, inspect.ismethod))
+        for func in city_funcs:
+            self.assertIsNotNone(func[1].__doc__)
+            self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
 class Test_City(unittest.TestCase):

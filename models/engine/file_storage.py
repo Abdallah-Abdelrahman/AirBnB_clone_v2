@@ -16,9 +16,12 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         '''Returns the dictionary `__objects`'''
-        return FileStorage.__objects
+        if not cls:
+            return FileStorage.__objects
+        return {k: v for k, v in FileStorage.__objects.items()
+                if isinstance(v, cls)}
 
     def new(self, obj):
         '''Sets in __objects the obj with key <obj class name>.id'''
@@ -56,3 +59,12 @@ class FileStorage:
                     FileStorage.__objects[k] = cls[v['__class__']](**v)
         except Exception:
             pass
+
+    def delete(self, obj=None):
+        """Delete obj from __objects if it’s inside"""
+        if not obj:
+            return
+        key = f"{obj.__class__.__name__}.{obj.id}"
+        if key in FileStorage.__objects:
+            del FileStorage.__objects[key]
+            self.save()

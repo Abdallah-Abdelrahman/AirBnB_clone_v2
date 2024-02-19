@@ -10,6 +10,44 @@ import uuid
 import models
 from unittest.mock import patch
 from models.review import Review
+import inspect
+import pycodestyle as pep8
+import models.review as review_model
+
+
+class TestReviewDocPep8(unittest.TestCase):
+    """unittest class for Base class documentation and pep8 conformaty"""
+    def test_pep8_review(self) -> None:
+        """Test that the review_module conforms to PEP8."""
+        style = pep8.StyleGuide(quiet=True)
+        result = style.check_files(['models/review.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_pep8_test_review(self) -> None:
+        """Test that the test_review_module conforms to PEP8."""
+        style = pep8.StyleGuide(quiet=True)
+        result = style.check_files(['tests/test_models/test_review.py'])
+        self.assertEqual(result.total_errors, 0,
+                         "Found code style errors (and warnings).")
+
+    def test_module_docstring(self) -> None:
+        """test module documentation"""
+        mod_doc = review_model.__doc__
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_class_docstring(self) -> None:
+        """test class documentation"""
+        mod_doc = str(Review.__doc__)
+        self.assertTrue(len(mod_doc) > 0)
+
+    def test_func_docstrings(self) -> None:
+        """Tests for the presence of docstrings in all functions"""
+        review_funcs = inspect.getmembers(Review, inspect.isfunction)
+        review_funcs.extend(inspect.getmembers(Review, inspect.ismethod))
+        for func in review_funcs:
+            self.assertIsNotNone(func[1].__doc__)
+            self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
 class Test_Review(unittest.TestCase):
