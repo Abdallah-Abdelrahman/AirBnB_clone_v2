@@ -55,7 +55,6 @@ class DBStorage:
         res = {}
         objs = []
         if cls:
-            # list of dictionaries
             objs = self.__session.query(cls).all()
         else:
             for c in classes:
