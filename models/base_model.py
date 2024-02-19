@@ -45,10 +45,9 @@ class BaseModel:
                 with `__class__` attr to manifest class instance
         '''
         _dict = {k: v.isoformat() if isinstance(v, datetime) else
-                 v for k, v in self.__dict__.items()}
+                 v for k, v in self.__dict__.items()
+                 if k != '_sa_instance_state'}
         _dict['__class__'] = self.__class__.__name__
-        if '_sa_instance_state' in _dict:
-            del _dict['_sa_instance_state']
         return _dict
 
     def delete(self):

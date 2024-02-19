@@ -83,6 +83,7 @@ class Test_state_attr(unittest.TestCase):
         """This function tests for the type of updated_at attr"""
         self.assertIs(type(State().updated_at), datetime.datetime)
 
+    @unittest.skipIf(models.db, "Testing a database")
     def test_type_name(self):
         """This function tests the type of name attr"""
         self.assertIs(type(State().name), str)
@@ -144,14 +145,17 @@ class Test_instantation(unittest.TestCase):
 
 class Test_save(unittest.TestCase):
     """This class tests the instance method save(self)"""
-
+    @unittest.skipIf(models.db, "Testing a database")
     def test_save(self):
         """This function tests updating the time"""
+        if models.db == 'db':
+            return
         state = State()
         old_time = state.updated_at
         state.save()
         self.assertNotEqual(state.updated_at, old_time)
 
+    @unittest.skipIf(models.db, "Testing a database")
     def test_two_save(self):
         """This function tests updates the time twice"""
         state = State()
