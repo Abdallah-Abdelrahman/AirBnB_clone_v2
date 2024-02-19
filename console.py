@@ -79,14 +79,26 @@ class HBNBCommand(cmd.Cmd):
         Creates a new instance of the class provided, save it into
         a JSON file, and prints the id
         """
+
         line = line.split(" ")
-        if not len(line[0]):
+
+        if not line[0]:
             print("** class name missing **")
             return
-        elif line[0] not in self.cls:
+        if line[0] not in self.cls:
             print("** class doesn't exist **")
             return
         obj = self.cls[line[0]]()
+        for i in range(1, len(line)):
+            if '=' not in line[i]:
+                continue
+            k, v = line[i].split('=')
+            if hasattr(obj, k):
+                cast = type(getattr(obj, k))
+                v = cast(v)
+            if isinstance(v, str) and v[0] == '"':
+                v = v.replace('_', ' ').replace('"', '')
+            setattr(obj, k, v)
         storage.save()
         print(obj.id)
 

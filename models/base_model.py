@@ -18,7 +18,6 @@ class BaseModel:
             return
         for k, v in kwargs.items():
             if k != '__class__':
-                # TODO: if *_at is not valid date string
                 setattr(self, k, v if k not in ('updated_at', 'created_at')
                         else datetime.strptime(v, '%Y-%m-%dT%H:%M:%S.%f'))
 
@@ -31,7 +30,8 @@ class BaseModel:
         '''returns a dictionary containing all keys/values of __dict__
 
         Return:
-            __dict__ plus __class__ represents class name
+            dictionary representaion of class attributes,
+                with `__class__` attr to manifest class instance
         '''
         _dict = {k: v.isoformat() if isinstance(v, datetime) else
                  v for k, v in self.__dict__.items()}

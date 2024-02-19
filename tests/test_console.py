@@ -188,17 +188,37 @@ class TestConsole_create(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("create User"))
             obj_id = f.getvalue().strip()
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand()
+                             .onecmd('''create User first_name="fola"
+                                        last_name="moniem" email="a@b.com"
+                                     '''))
+            key = 'User.' + f.getvalue().strip()
+            data = models.storage.all()
+            self.assertIn(key, data)
+            self.assertIn('first_name', data[key].to_dict())
+            self.assertIn('last_name', data[key].to_dict())
+            self.assertIn('email', data[key].to_dict())
         with open(models.storage._FileStorage__file_path,
                   encoding="utf-8") as file:
             read_data = file.read()
             self.assertIn("User." + obj_id, read_data)
-        self.assertIn("User." + obj_id, models.storage.all().keys())
+        self.assertIn("User." + obj_id, models.storage.all())
 
     def test_create_cmd_city(self):
         """this method creates a new city"""
         with patch('sys.stdout', new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("create City"))
             obj_id = f.getvalue().strip()
+        with patch('sys.stdout', new=StringIO()) as f:
+            self.assertFalse(HBNBCommand()
+                             .onecmd('''create City name="California"
+                                     state 123'''))
+            key = 'City.' + f.getvalue().strip()
+            data = models.storage.all()
+            self.assertIn(key, data)
+            self.assertIn('name', data[key].to_dict())
+            self.assertNotIn('state', data[key].to_dict())
         with open(models.storage._FileStorage__file_path,
                   encoding="utf-8") as file:
             read_data = file.read()
