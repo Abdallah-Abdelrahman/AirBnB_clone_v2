@@ -31,8 +31,4 @@ class State(BaseModel, Base):
     def cities(self) -> List:
         """cities getter attribute"""
         from models import storage
-        cities = storage.all(City).copy()
-        for k, v in cities.items():
-            if v.state_id != self.id:
-                del cities[k]
-        return list(cities.values())
+        return [v for v in storage.all(City).values() if v.state_id == self.id]
