@@ -19,14 +19,14 @@ class TestCityDocPep8(unittest.TestCase):
     """unittest class for Base class documentation and pep8 conformaty"""
     def test_pep8_city(self) -> None:
         """Test that the city_module conforms to PEP8."""
-        style = pep8.StyleGuide(quiet=True)
+        style = pep8.StyleGuide()
         result = style.check_files(['models/city.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
     def test_pep8_test_city(self) -> None:
         """Test that the test_city_module conforms to PEP8."""
-        style = pep8.StyleGuide(quiet=True)
+        style = pep8.StyleGuide()
         result = style.check_files(['tests/test_models/test_city.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")

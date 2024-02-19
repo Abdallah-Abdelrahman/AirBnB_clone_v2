@@ -122,8 +122,11 @@ class Test_creating_objs(unittest.TestCase):
     def test_all_dict(self):
         """This function tests all method dictionary"""
         base1 = BaseModel()
+        base1.save()
         base2 = BaseModel()
+        base2.save()
         base3 = BaseModel()
+        base3.save()
         objs = models.storage.all()
         self.assertEqual(len(objs), 3)
 
@@ -162,12 +165,19 @@ class Test_creating_objs(unittest.TestCase):
     def test_save(self):
         """This function tests for the save method of FileStorage"""
         base = BaseModel()
+        base.save()
         usr = User()
+        usr.save()
         state = State()
+        state.save()
         city = City()
+        city.save()
         amenity = Amenity()
+        amenity.save()
         place = Place()
+        place.save()
         review = Review()
+        review.save()
         # All objs will be added automatically to __objects dict
         models.storage.save()
         with open("file.json", encoding="utf-8") as f:
@@ -188,12 +198,19 @@ class Test_creating_objs(unittest.TestCase):
     def test_reload(self):
         """This function tests the reload function"""
         base = BaseModel()
+        base.save()
         usr = User()
+        usr.save()
         state = State()
+        state.save()
         city = City()
+        city.save()
         amenity = Amenity()
+        amenity.save()
         place = Place()
+        place.save()
         review = Review()
+        review.save()
         models.storage.save()
         models.storage._FileStorage__objects = {}
         models.storage.reload()
