@@ -7,7 +7,7 @@ website on our server.</b>
     <img src="https://drive.google.com/uc?export=view&id=1sWCzpc7sIY0VCsEOpQDmJPS5q7weRhj-" alt="AirBnB fancy logo">
 </figure>
 
-## Table of Contents 
+## Table of Contents
 0. [The Console](#the-console)
 1. [Project Strurcture](#project-structure)
 2. [Class Hierarchy in AirBnB Backend System](#class-hierarchy)
@@ -44,6 +44,7 @@ The console will be a tool to validate this storage engine as the figure:
 ```
 ├── AUTHORS
 ├── console.py
+├── LICENSE
 ├── models
 │   ├── amenity.py
 │   ├── base_model.py
@@ -57,21 +58,66 @@ The console will be a tool to validate this storage engine as the figure:
 │   ├── state.py
 │   └── user.py
 ├── README.md
-└── tests
-    ├── test_console.py
-    ├── test_init.py
-    └── test_models
-        ├── __init__.py
-        ├── test_amenity.py
-        ├── test_base_model.py
-        ├── test_city.py
-        ├── test_engine
-        │   ├── __init__.py
-        │   └── test_file_storage.py
-        ├── test_place.py
-        ├── test_review.py
-        ├── test_state.py
-        └── test_user.py
+├── test_params_create
+├── tests
+│   ├── test_console.py
+│   ├── test_init.py
+│   └── test_models
+│       ├── __init__.py
+│       ├── test_amenity.py
+│       ├── test_base_model.py
+│       ├── test_city.py
+│       ├── test_engine
+│       │   ├── __init__.py
+│       │   └── test_file_storage.py
+│       ├── test_place.py
+│       ├── test_review.py
+│       ├── test_state.py
+│       └── test_user.py
+└── web_static
+    ├── 0-index.html
+    ├── 100-index.html
+    ├── 101-index.html
+    ├── 102-index.html
+    ├── 103-index.html
+    ├── 1-index.html
+    ├── 2-index.html
+    ├── 3-index.html
+    ├── 4-index.html
+    ├── 5-index.html
+    ├── 6-index.html
+    ├── 7-index.html
+    ├── 8-index.html
+    ├── images
+    │   ├── icon_bath.png
+    │   ├── icon_bed.png
+    │   ├── icon_group.png
+    │   ├── icon_pets.png
+    │   ├── icon.png
+    │   ├── icon_tv.png
+    │   ├── icon_wifi.png
+    │   ├── logo.png
+    │   ├── temperatures (1).sql
+    │   ├── temperatures (2).sql
+    │   └── temperatures.sql
+    └── styles
+        ├── 100-places.css
+        ├── 101-places.css
+        ├── 102-filters.css
+        ├── 102-places.css
+        ├── 103-filters.css
+        ├── 2-common.css
+        ├── 2-footer.css
+        ├── 2-header.css
+        ├── 3-common.css
+        ├── 3-footer.css
+        ├── 3-header.css
+        ├── 4-common.css
+        ├── 4-filters.css
+        ├── 5-filters.css
+        ├── 6-filters.css
+        ├── 7-places.css
+        └── 8-places.css
 ```
 
 <h2>
@@ -97,7 +143,7 @@ Creates a new instance of a specified class (e.g., `BaseModel`), **saves it to a
 **Prints the string representation of an instance** based on the provided class name and ID. Error messages are displayed if the class name is missing, the class doesn't exist, the ID is missing, or no instance is found for the given ID.
 
     $ show BaseModel e7f9cac8-0f53-4fbd-9b42-68541032f2c2
-    
+
 ### 3. `destroy`
 
 **Deletes an instance based on the class name and ID,** saving the change into the JSON file. Error messages are displayed for missing class name, non-existent class, missing ID, or when no instance is found for the given ID.
@@ -165,5 +211,5 @@ And once your contribution is reviewed and approved, it will be merged into the 
 <h2>
     <a id='license'>License</a>
 </h2>
-## License 
+
 The AirBnB clone project is open-source and released under the MIT License. This license grants permission to anyone to use, modify, and distribute the software, subject to the conditions outlined in the license agreement.
