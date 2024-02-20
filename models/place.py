@@ -33,7 +33,8 @@ place_amenity = Table('place_amenity', Base.metadata,
                              cascade='all, delete-orphan'), ),
        amenities=(relationship("Amenity", secondary=place_amenity,
                                viewonly=False,
-                               back_populates='place_amenities'), [])
+                               back_populates='place_amenities'), []),
+       amenity_ids=([], [])
        )
 class Place(BaseModel, Base):
     '''Place class.
