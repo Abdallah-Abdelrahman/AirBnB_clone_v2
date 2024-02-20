@@ -10,7 +10,7 @@ from typing import List
 
 @store('reviews',
         city_id=(Column(String(60), ForeignKey('cities.id'),
-                        nullable=True), ''),
+                        nullable=False), ''),
         user_id=(Column(String(60), ForeignKey('users.id'),
                         nullable=False), ''),
         name=(Column(String(128), nullable=True), ''),
