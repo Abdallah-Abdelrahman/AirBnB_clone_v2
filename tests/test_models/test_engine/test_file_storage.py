@@ -18,6 +18,7 @@ from models.review import Review
 import inspect
 import pycodestyle as pep8
 from models.engine import file_storage
+from models import db
 
 
 class TestBaseModelDocPep8(unittest.TestCase):
@@ -56,6 +57,7 @@ class TestBaseModelDocPep8(unittest.TestCase):
             self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
+@unittest.skipIf(db, "not db")
 class Test_attributes(unittest.TestCase):
     """This class defines unittests for the attributes of FileStorage class"""
 
@@ -78,6 +80,7 @@ class Test_attributes(unittest.TestCase):
         self.assertIs(type(models.storage), FileStorage)
 
 
+@unittest.skipIf(db, "not db")
 class Test_creating_objs(unittest.TestCase):
     """This class creates objects and checks storage instance changes"""
 

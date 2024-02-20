@@ -10,6 +10,7 @@ from models.amenity import Amenity
 import inspect
 import pycodestyle as pep8
 import models.amenity as amenity_model
+from models import db
 
 
 class TestAmenityDocPep8(unittest.TestCase):
@@ -47,6 +48,7 @@ class TestAmenityDocPep8(unittest.TestCase):
             self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
+@unittest.skipIf(db, "not db")
 class Test_Amenity(unittest.TestCase):
     """This class defines unittests for the different attributes both inherited
     and unique for the Amenity Class"""
@@ -108,6 +110,7 @@ class Test_Amenity(unittest.TestCase):
         self.assertIn("'updated_at': " + repr(tdy), amenity.__str__())
 
 
+@unittest.skipIf(db, "not db")
 class Test_instantation(unittest.TestCase):
     """This class tests the instantation of a Amenity class"""
 
@@ -140,6 +143,7 @@ class Test_instantation(unittest.TestCase):
         self.assertEqual(dict_amenity2['__class__'], "Amenity")
 
 
+@unittest.skipIf(db, "not db")
 class Test_save(unittest.TestCase):
     """This class tests the instance method save(self)"""
 
@@ -174,6 +178,7 @@ class Test_save(unittest.TestCase):
             self.assertIn("Amenity." + amenity.id, f.read())
 
 
+@unittest.skipIf(db, "not db")
 class Test_to_dict(unittest.TestCase):
     """unittests for the instance method to_dict"""
 

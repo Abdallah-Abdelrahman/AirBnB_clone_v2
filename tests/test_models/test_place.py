@@ -13,6 +13,7 @@ from models.place import Place
 import inspect
 import pycodestyle as pep8
 import models.place as place_model
+from models import db
 
 
 class TestPlaceDocPep8(unittest.TestCase):
@@ -50,6 +51,7 @@ class TestPlaceDocPep8(unittest.TestCase):
             self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
+@unittest.skipIf(db, "not db")
 class Test_Place(unittest.TestCase):
     '''Test Place class'''
     def test_docstr(self):

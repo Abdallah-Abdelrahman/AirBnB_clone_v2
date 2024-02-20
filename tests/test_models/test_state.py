@@ -11,6 +11,7 @@ from models.state import State
 import inspect
 import pycodestyle as pep8
 import models.state as state_model
+from models import db
 
 
 class TestStateDocPep8(unittest.TestCase):
@@ -48,6 +49,7 @@ class TestStateDocPep8(unittest.TestCase):
             self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
+@unittest.skipIf(db, "not db")
 class Test_state_attr(unittest.TestCase):
     """This class defines unittests for the different attributes both inherited
     and unique for the State Class"""
@@ -83,7 +85,6 @@ class Test_state_attr(unittest.TestCase):
         """This function tests for the type of updated_at attr"""
         self.assertIs(type(State().updated_at), datetime.datetime)
 
-    @unittest.skipIf(models.db, "Testing a database")
     def test_type_name(self):
         """This function tests the type of name attr"""
         self.assertIs(type(State().name), str)
@@ -111,6 +112,7 @@ class Test_state_attr(unittest.TestCase):
         self.assertIn("'updated_at': " + repr(tdy), state.__str__())
 
 
+@unittest.skipIf(db, "not db")
 class Test_instantation(unittest.TestCase):
     """This class tests the instantation of a State class"""
 
@@ -143,9 +145,9 @@ class Test_instantation(unittest.TestCase):
         self.assertEqual(dict_state2['__class__'], "State")
 
 
+@unittest.skipIf(db, "not db")
 class Test_save(unittest.TestCase):
     """This class tests the instance method save(self)"""
-    @unittest.skipIf(models.db, "Testing a database")
     def test_save(self):
         """This function tests updating the time"""
         if models.db == 'db':
@@ -155,7 +157,6 @@ class Test_save(unittest.TestCase):
         state.save()
         self.assertNotEqual(state.updated_at, old_time)
 
-    @unittest.skipIf(models.db, "Testing a database")
     def test_two_save(self):
         """This function tests updates the time twice"""
         state = State()
@@ -180,6 +181,7 @@ class Test_save(unittest.TestCase):
             self.assertIn("State." + state.id, f.read())
 
 
+@unittest.skipIf(db, "not db")
 class Test_to_dict(unittest.TestCase):
     """unittests for the instance method to_dict"""
 

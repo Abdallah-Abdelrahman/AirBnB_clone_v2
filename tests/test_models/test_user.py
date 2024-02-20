@@ -11,6 +11,7 @@ import models
 import inspect
 import pycodestyle as pep8
 import models.user as user_model
+from models import db
 
 
 class TestUserDocPep8(unittest.TestCase):
@@ -48,6 +49,7 @@ class TestUserDocPep8(unittest.TestCase):
             self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
+@unittest.skipIf(db, "not db")
 class Test_user_attr(unittest.TestCase):
     """This class defines unittests for the different attributes both inherited
     and unique for the User Class"""
@@ -122,6 +124,7 @@ class Test_user_attr(unittest.TestCase):
         self.assertIn("'updated_at': " + repr(tdy), usr.__str__())
 
 
+@unittest.skipIf(db, "not db")
 class Test_instantation(unittest.TestCase):
     """Thid class tests the instantation of a User class"""
 
@@ -153,6 +156,7 @@ class Test_instantation(unittest.TestCase):
         self.assertEqual(dict_usr2['__class__'], "User")
 
 
+@unittest.skipIf(db, "not db")
 class Test_save(unittest.TestCase):
     """This class tests the instance method save(self)"""
 
@@ -187,6 +191,7 @@ class Test_save(unittest.TestCase):
             self.assertIn("User." + usr.id, f.read())
 
 
+@unittest.skipIf(db, "not db")
 class Test_to_dict(unittest.TestCase):
     """unittests for the instance method to_dict"""
 

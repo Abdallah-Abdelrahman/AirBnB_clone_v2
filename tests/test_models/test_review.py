@@ -13,6 +13,7 @@ from models.review import Review
 import inspect
 import pycodestyle as pep8
 import models.review as review_model
+from models import db
 
 
 class TestReviewDocPep8(unittest.TestCase):
@@ -50,6 +51,7 @@ class TestReviewDocPep8(unittest.TestCase):
             self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
+@unittest.skipIf(db, "not db")
 class Test_Review(unittest.TestCase):
     '''Test Review class'''
     def test_docstr(self):

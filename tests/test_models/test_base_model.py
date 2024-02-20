@@ -11,6 +11,7 @@ from models.base_model import BaseModel
 import inspect
 import pycodestyle as pep8
 import models.base_model as base_model
+from models import db
 
 
 class TestBaseModelDocPep8(unittest.TestCase):
@@ -48,6 +49,7 @@ class TestBaseModelDocPep8(unittest.TestCase):
             self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
+@unittest.skipIf(db, "not db")
 class Test_Base(unittest.TestCase):
     """This class defines unittests for the instantiation of BaseModel class"""
 
@@ -94,6 +96,7 @@ class Test_Base(unittest.TestCase):
         self.assertIn("'updated_at': " + repr(tdy), base.__str__())
 
 
+@unittest.skipIf(db, "not db")
 class Test_save(unittest.TestCase):
     """This class tests the instance method save(self)"""
 
@@ -128,6 +131,7 @@ class Test_save(unittest.TestCase):
             self.assertIn("BaseModel." + base.id, f.read())
 
 
+@unittest.skipIf(db, "not db")
 class Test_to_dict(unittest.TestCase):
     """unittests for the instance method to_dict"""
 
@@ -183,6 +187,7 @@ class Test_to_dict(unittest.TestCase):
             BaseModel().to_dict("arg")
 
 
+@unittest.skipIf(db, "not db")
 class Test_instantiation(unittest.TestCase):
     """This class defines unittests related to instantiation"""
 
