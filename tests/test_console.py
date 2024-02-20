@@ -13,7 +13,8 @@ import inspect
 from console import HBNBCommand
 from unittest.mock import patch
 from io import StringIO
-from models import db
+from models import db, storage
+import MySQLdb
 
 
 class TestConsoleDocPep8(unittest.TestCase):
@@ -56,6 +57,63 @@ class TestConsoleDocPep8(unittest.TestCase):
         base_funcs.extend(inspect.getmembers(HBNBCommand, inspect.ismethod))
         for func in base_funcs:
             self.assertTrue(len(str(func[1].__doc__)) > 0)
+
+
+def create_cursor():
+    """Create a cursor"""
+    conn = MySQLdb.connect(host=os.getenv('HBNB_MYSQL_HOST'),
+                           port=3306,
+                           user=os.getenv('HBNB_MYSQL_USER'),
+                           passwd=os.getenv('HBNB_MYSQL_PWD'),
+                           db=os.getenv('HBNB_MYSQL_DB'))
+    return conn.cursor()
+
+
+@unittest.skipIf(not db, "not db")
+class TestConsoleDB(unittest.TestCase):
+    """This class defines unittests for the console when using db"""
+
+    def setUp(self):
+        """This function sets up the environment for testing"""
+        self.cursor = create_cursor()
+        self.instances = {}
+
+    def tearDown(self):
+        """This function removes the environment for testing"""
+        ignore = ['City', 'Review', 'Place']
+        for k, instance in self.instances.items():
+            if k not in ignore:
+                instance.delete()
+        storage.save()
+        self.cursor.close()
+
+    def test_create(self):
+        """This function tests the create method of the console"""
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.assertFalse(HBNBCommand()
+                             .onecmd("create State name='California'"))
+            obj_id = f.getvalue().strip()
+        self.cursor.execute("SELECT * FROM states WHERE id='{}'"
+                            .format(obj_id))
+        self.instances["State"] = storage.all()[f"State.{obj_id}"]
+        data = self.cursor.fetchone()
+        self.assertEqual(obj_id, data[0])
+
+    def test_update(self):
+        """This function tests the update method of the console"""
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.assertFalse(HBNBCommand().onecmd("create State name='Cali'"))
+            obj_id = f.getvalue().strip()
+        self.instances["State1"] = storage.all()[f"State.{obj_id}"]
+        with patch("sys.stdout", new=StringIO()) as f:
+            cmd = f"update State {obj_id} name 'California'"
+            self.assertFalse(HBNBCommand().onecmd(cmd))
+        self.cursor.close()
+        self.cursor = create_cursor()
+        self.cursor.execute("SELECT name FROM states WHERE id='{}'"
+                            .format(obj_id))
+        data = self.cursor.fetchone()
+        self.assertEqual("California", data[0])
 
 
 class TestConsole_Base(unittest.TestCase):
@@ -135,10 +193,10 @@ class TestConsole_help(unittest.TestCase):
         out = ["Creates a new instance of the class provided, save it into\n",
                "        a JSON file, and prints the id"]
         with patch("sys.stdout", new=StringIO()) as f:
-            self.assertFalse(HBNBCommand().onecmd("help all"))
+            self.assertFalse(HBNBCommand().onecmd("help create"))
             self.assertEqual(''.join(out), f.getvalue().strip())
 
-    def test_help_create(self):
+    def test_help_update(self):
         """This function tests the <help update> message content"""
         o = ["Updates an instance based on the class name and id by adding\n",
              "        or updating attributes"]
