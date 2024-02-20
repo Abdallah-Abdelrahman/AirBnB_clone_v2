@@ -60,11 +60,13 @@ class BaseModel:
                                      self.id, self.__dict__)
 
 
-def store(**kw):
+def store(*args, **kw):
     '''Decorator to set class attributes base on
     storage type.
 
     Args:
+        args: positional arguments represnents fields to skip
+            when it's file storage.
         kw: named arguments represents class attrs
 
     Returns:
@@ -76,6 +78,8 @@ def store(**kw):
 
     def decorate(cls):
         for k, v in kw.items():
+            if not db and k in args:
+                continue
             setattr(cls, k, v if db else '')
         return cls
 
