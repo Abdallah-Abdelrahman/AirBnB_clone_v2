@@ -22,8 +22,17 @@ class DBStorage:
     """DBStorage class
 
     Attributes:
+        __engine: None
+        __session: None
+
 
     Methods:
+        __init__(self)
+        reload(self)
+        all(self, cls=None)
+        new(self, obj)
+        save(self)
+        delete(self, obj=None)
     """
     __engine = None
     __session = None
@@ -81,3 +90,14 @@ class DBStorage:
         """
         if obj:
             self.__session.delete(obj)
+
+    def close(self):
+        """call remove method on the private session attribute
+        """
+        self.__session.close()
+
+    def drop(self, cls=None):
+        """drop all tables
+        """
+        if cls:
+            self.__session.query(cls).delete()

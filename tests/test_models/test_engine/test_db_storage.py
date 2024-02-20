@@ -119,6 +119,46 @@ class TestDBStorage(unittest.TestCase):
         self.cursor.execute("SELECT * FROM states")
         self.assertEqual(len(all_objs) - self.cursor.rowcount, 1)
 
+    def test_save(self):
+        """Test the save method"""
+        new_state = State(name="New York")
+        new_state.save()
+        self.instances['State3'] = new_state
+        self.storage.save()
+        self.cursor.close()
+        self.cursor = create_cursor()
+        self.cursor.execute("SELECT * FROM states")
+        self.assertEqual(len(self.storage.all(State)), self.cursor.rowcount)
+
+    def test_delete(self):
+        """Test the delete method"""
+        self.instances['del_state'] = State(name="Texas")
+        self.instances['del_state'].save()
+        del_id = self.instances['del_state'].id
+        self.cursor.close()
+        self.cursor = create_cursor()
+        self.cursor.execute("SELECT * FROM states WHERE id='{}'"
+                            .format(del_id))
+        self.assertEqual(self.cursor.rowcount, 1)
+        self.storage.delete(self.instances['del_state'])
+        self.storage.save()
+        self.cursor.close()
+        self.cursor = create_cursor()
+        self.cursor.execute("SELECT * FROM states WHERE id='{}'"
+                            .format(del_id))
+        self.assertEqual(self.cursor.rowcount, 0)
+        self.assertNotIn(self.instances['del_state'],
+                         self.storage.all(State).values())
+        del self.instances['del_state']
+
+    def test_reload(self):
+        """Test the reload method"""
+        from sqlalchemy.orm.session import Session
+        self.assertIsInstance(self.storage._DBStorage__session, Session)
+        all_objs = self.storage.all()
+        self.assertIsInstance(all_objs, dict)
+        self.assertEqual(len(all_objs), len(self.instances))
+
 
 if __name__ == '__main__':
     unittest.main()
