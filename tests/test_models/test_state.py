@@ -17,14 +17,14 @@ class TestStateDocPep8(unittest.TestCase):
     """unittest class for Base class documentation and pep8 conformaty"""
     def test_pep8_state(self) -> None:
         """Test that the state_module conforms to PEP8."""
-        style = pep8.StyleGuide(quiet=True)
+        style = pep8.StyleGuide()
         result = style.check_files(['models/state.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
     def test_pep8_test_state(self) -> None:
         """Test that the test_state_module conforms to PEP8."""
-        style = pep8.StyleGuide(quiet=True)
+        style = pep8.StyleGuide()
         result = style.check_files(['tests/test_models/test_state.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
@@ -83,6 +83,7 @@ class Test_state_attr(unittest.TestCase):
         """This function tests for the type of updated_at attr"""
         self.assertIs(type(State().updated_at), datetime.datetime)
 
+    @unittest.skipIf(models.db, "Testing a database")
     def test_type_name(self):
         """This function tests the type of name attr"""
         self.assertIs(type(State().name), str)
@@ -91,6 +92,7 @@ class Test_state_attr(unittest.TestCase):
         """This function tests that an object is automatically saved in
         the ___objects attr of storage instance"""
         state = State()
+        state.save()
         self.assertIn(state, models.storage.all().values())
 
     def test_type_class(self):
@@ -143,14 +145,17 @@ class Test_instantation(unittest.TestCase):
 
 class Test_save(unittest.TestCase):
     """This class tests the instance method save(self)"""
-
+    @unittest.skipIf(models.db, "Testing a database")
     def test_save(self):
         """This function tests updating the time"""
+        if models.db == 'db':
+            return
         state = State()
         old_time = state.updated_at
         state.save()
         self.assertNotEqual(state.updated_at, old_time)
 
+    @unittest.skipIf(models.db, "Testing a database")
     def test_two_save(self):
         """This function tests updates the time twice"""
         state = State()

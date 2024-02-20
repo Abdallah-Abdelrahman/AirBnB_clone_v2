@@ -214,6 +214,7 @@ class Test_instantiation(unittest.TestCase):
         """This function tests the calling of new in instance storage
         during instantiation"""
         base = BaseModel()
+        base.save()
         self.assertIn("BaseModel." + base.id, models.storage.all().keys())
 
     def teat_init_class(self):

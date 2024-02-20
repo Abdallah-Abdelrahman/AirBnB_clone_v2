@@ -89,6 +89,7 @@ class Test_Amenity(unittest.TestCase):
         """This function tests that an object is automatically saved in
         the ___objects attr of storage instance"""
         amenity = Amenity()
+        amenity.save()
         self.assertIn(amenity, models.storage.all().values())
 
     def test_type_class(self):

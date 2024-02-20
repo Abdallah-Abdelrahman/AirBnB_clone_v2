@@ -2,18 +2,25 @@
 '''Module defines City'''
 
 from models.base_model import BaseModel
+from models.base_model import Base
+from sqlalchemy import Column, String, ForeignKey
+
+from os import getenv
+
+db = (False, True)['db' == getenv("HBNB_TYPE_STORAGE")]
 
 
-class City(BaseModel):
+class City(BaseModel, Base):
     '''City class.
 
     Atrrs:
         state_id(str):
         name(str):
     '''
-    state_id = ''
-    name = ''
-
-    def __init__(self, *args, **kwargs):
-        '''Initiliaztion'''
-        super().__init__(*args, **kwargs)
+    __tablename__ = 'cities'
+    if db:
+        state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
+        name = Column(String(128), nullable=False)
+    else:
+        state_id = ''
+        name = ''

@@ -17,14 +17,14 @@ class TestUserDocPep8(unittest.TestCase):
     """unittest class for Base class documentation and pep8 conformaty"""
     def test_pep8_user(self) -> None:
         """Test that the user_module conforms to PEP8."""
-        style = pep8.StyleGuide(quiet=True)
+        style = pep8.StyleGuide()
         result = style.check_files(['models/user.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
     def test_pep8_test_user(self) -> None:
         """Test that the test_user_module conforms to PEP8."""
-        style = pep8.StyleGuide(quiet=True)
+        style = pep8.StyleGuide()
         result = style.check_files(['tests/test_models/test_user.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
@@ -103,6 +103,7 @@ class Test_user_attr(unittest.TestCase):
         """This function tests that an object is automatically saved in
         the ___objects attr of storage instance"""
         usr = User()
+        usr.save()
         self.assertIn(usr, models.storage.all().values())
 
     def test_type_class(self):

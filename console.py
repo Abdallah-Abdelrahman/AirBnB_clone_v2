@@ -16,6 +16,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
+from models import db
 
 
 class HBNBCommand(cmd.Cmd):
@@ -93,12 +94,13 @@ class HBNBCommand(cmd.Cmd):
             if '=' not in line[i]:
                 continue
             k, v = line[i].split('=')
-            if hasattr(obj, k):
+            if hasattr(obj, k) and not db:
                 cast = type(getattr(obj, k))
                 v = cast(v)
             if isinstance(v, str) and v[0] == '"':
                 v = v.replace('_', ' ').replace('"', '')
             setattr(obj, k, v)
+        obj.save()
         storage.save()
         print(obj.id)
 
@@ -150,11 +152,15 @@ class HBNBCommand(cmd.Cmd):
         Prints all string representation of all instances based or
         not on the class name
         """
+        #
         line = line.split(" ")
         if len(line[0]) and line[0] not in self.cls:
             print("** class doesn't exist **")
             return
-        obj_dict = storage.all()
+        if line[0] in self.cls:
+            obj_dict = storage.all(self.cls[line[0]])
+        else:
+            obj_dict = storage.all()
         if not len(line[0]):
             print(list(map(lambda x: str(x), obj_dict.values())))
             return
@@ -192,6 +198,7 @@ class HBNBCommand(cmd.Cmd):
             type_attr = type(getattr(obj, line[2]))
             line[3] = type_attr(line[3])
         setattr(obj, line[2], line[3])
+        obj.save()
         storage.save()
 
     def do_count(self, line):
