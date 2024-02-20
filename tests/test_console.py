@@ -58,7 +58,6 @@ class TestConsoleDocPep8(unittest.TestCase):
             self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
-@unittest.skipIf(db, "not db")
 class TestConsole_Base(unittest.TestCase):
     """This class defines unittests for the basic usage of the console"""
 
@@ -106,7 +105,6 @@ class TestConsole_Base(unittest.TestCase):
             self.assertEqual(''.join(expected), f.getvalue().strip())
 
 
-@unittest.skipIf(db, "not db")
 class TestConsole_help(unittest.TestCase):
     """This class defines unittests for the help method of the console"""
 
