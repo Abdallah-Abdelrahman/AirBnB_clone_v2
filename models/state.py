@@ -8,9 +8,11 @@ from models.city import City
 from typing import List
 
 
-@store('cities', name=Column(String(128), nullable=False),
-       cities=relationship('City', cascade='all, delete-orphan',
-                           backref='state'))
+@store('cities',
+       name=(Column(String(128), nullable=False), ''),
+       cities=(relationship('City', cascade='all, delete-orphan',
+                            backref='state'), )
+       )
 class State(BaseModel, Base):
     '''State class
 

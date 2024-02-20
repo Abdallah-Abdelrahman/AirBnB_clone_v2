@@ -1,15 +1,18 @@
 #!/usr/bin/python3
 '''Module defines City'''
 
-from models.base_model import BaseModel
-from models.base_model import Base
+from models.base_model import BaseModel, Base, store
 from sqlalchemy import Column, String, ForeignKey
-
-from os import getenv
-
-db = (False, True)['db' == getenv("HBNB_TYPE_STORAGE")]
+from sqlalchemy.orm import relationship
 
 
+@store('places',
+       name=(Column(String(128), nullable=False), ''),
+       state_id=(Column(String(60), ForeignKey('states.id'),
+                        nullable=False), ''),
+       places=(relationship('Place', backref='cities',
+                            cascade='all, delete-orphan'), )
+       )
 class City(BaseModel, Base):
     '''City class.
 
@@ -18,9 +21,3 @@ class City(BaseModel, Base):
         name(str):
     '''
     __tablename__ = 'cities'
-    if db:
-        state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
-        name = Column(String(128), nullable=False)
-    else:
-        state_id = ''
-        name = ''

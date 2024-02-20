@@ -3,7 +3,7 @@
 
 from uuid import uuid4
 from datetime import datetime
-from sqlalchemy import Column, String, DateTime, Integer
+from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -65,7 +65,7 @@ def store(*args, **kw):
     storage type.
 
     Args:
-        args: positional arguments represnents fields to skip
+        args: positional arguments represnent fields to skip
             when it's file storage.
         kw: named arguments represents class attrs
 
@@ -80,7 +80,7 @@ def store(*args, **kw):
         for k, v in kw.items():
             if not db and k in args:
                 continue
-            setattr(cls, k, v if db else '')
+            setattr(cls, k, v[0] if db else v[1])
         return cls
 
     return decorate
