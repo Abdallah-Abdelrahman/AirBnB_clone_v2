@@ -18,6 +18,7 @@ from models.user import User
 from models.place import Place, place_amenity
 from models.review import Review
 from models.amenity import Amenity
+import MySQLdb
 
 
 class TestBaseModelDocPep8(unittest.TestCase):
@@ -56,6 +57,16 @@ class TestBaseModelDocPep8(unittest.TestCase):
             self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
+def create_cursor():
+    """Create a cursor"""
+    conn = MySQLdb.connect(host=os.getenv('HBNB_MYSQL_HOST'),
+                           port=3306,
+                           user=os.getenv('HBNB_MYSQL_USER'),
+                           passwd=os.getenv('HBNB_MYSQL_PWD'),
+                           db=os.getenv('HBNB_MYSQL_DB'))
+    return conn.cursor()
+
+
 @unittest.skipIf(not db, "db")
 class TestDBStorage(unittest.TestCase):
     """Test for the DBStorage class"""
@@ -78,6 +89,7 @@ class TestDBStorage(unittest.TestCase):
         for instance in self.instances.values():
             instance.save()
         self.storage.save()
+        self.cursor = create_cursor()
 
     def tearDown(self):
         """Tear down the tests"""
@@ -86,22 +98,26 @@ class TestDBStorage(unittest.TestCase):
             if k not in ignore:
                 instance.delete()
         self.storage.save()
+        self.cursor.close()
 
     def test_all(self):
         """Test the all method"""
-        print("test_all")
         all_objs = self.storage.all()
         self.assertIsInstance(all_objs, dict)
         self.assertEqual(len(all_objs), len(self.instances))
 
     def test_new(self):
         """Test the new method"""
-        print("test_new")
+        all_objs = self.storage.all(State)
+        self.cursor.execute("SELECT * FROM states")
+        self.assertEqual(len(all_objs), self.cursor.rowcount)
         new_state = State(name="New York")
         new_state.save()
         self.instances['State2'] = new_state
-        all_objs = self.storage.all()
+        all_objs = self.storage.all(State)
         self.assertIn(new_state, all_objs.values())
+        self.cursor.execute("SELECT * FROM states")
+        self.assertEqual(len(all_objs) - self.cursor.rowcount, 1)
 
 
 if __name__ == '__main__':
