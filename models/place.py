@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 from typing import List
 
 
-@store(
+@store('reviews',
         city_id=(Column(String(60), ForeignKey('cities.id'),
                         nullable=True), ''),
         user_id=(Column(String(60), ForeignKey('users.id'),
