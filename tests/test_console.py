@@ -13,6 +13,7 @@ import inspect
 from console import HBNBCommand
 from unittest.mock import patch
 from io import StringIO
+from models import db
 
 
 class TestConsoleDocPep8(unittest.TestCase):
@@ -57,6 +58,7 @@ class TestConsoleDocPep8(unittest.TestCase):
             self.assertTrue(len(str(func[1].__doc__)) > 0)
 
 
+@unittest.skipIf(db, "not db")
 class TestConsole_Base(unittest.TestCase):
     """This class defines unittests for the basic usage of the console"""
 
@@ -104,6 +106,7 @@ class TestConsole_Base(unittest.TestCase):
             self.assertEqual(''.join(expected), f.getvalue().strip())
 
 
+@unittest.skipIf(db, "not db")
 class TestConsole_help(unittest.TestCase):
     """This class defines unittests for the help method of the console"""
 
@@ -176,6 +179,7 @@ class TestConsole_help(unittest.TestCase):
             self.assertEqual(''.join(out), f.getvalue().strip())
 
 
+@unittest.skipIf(db, "not db")
 class TestConsole_create(unittest.TestCase):
     """This class defines unittests for the create method of the console"""
 
@@ -293,6 +297,7 @@ class TestConsole_create(unittest.TestCase):
         self.assertIn("Amenity." + obj_id, models.storage.all().keys())
 
 
+@unittest.skipIf(db, "not db")
 class TestConsole_show(unittest.TestCase):
     """This class defines unittests for the create method of the console"""
 
@@ -553,6 +558,7 @@ class TestConsole_show(unittest.TestCase):
             self.assertEqual(f.getvalue().strip(), str(obj))
 
 
+@unittest.skipIf(db, "not db")
 class TestConsole_destroy(unittest.TestCase):
     """This class defines unittests for the destroy method of the console"""
 
@@ -793,6 +799,7 @@ class TestConsole_destroy(unittest.TestCase):
             self.assertNotIn("Review." + obj_id, models.storage.all())
 
 
+@unittest.skipIf(db, "not db")
 class TestConsole_all(unittest.TestCase):
     """This class defines unittests for the all method of the console"""
 
@@ -971,6 +978,7 @@ class TestConsole_all(unittest.TestCase):
             self.assertTrue(all("Review" in d_ for d_ in list_obj))
 
 
+@unittest.skipIf(db, "not db")
 class TestConsole_update(unittest.TestCase):
     """This class defines unittests for the update method of the console"""
 
@@ -1641,6 +1649,7 @@ class TestConsole_update(unittest.TestCase):
         self.assertEqual(_dict['first_name'], "John Doe")
 
 
+@unittest.skipIf(db, "not db")
 class Test_count(unittest.TestCase):
     '''class test counting the number of intances'''
     @classmethod
