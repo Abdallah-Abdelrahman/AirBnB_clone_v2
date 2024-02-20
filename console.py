@@ -210,6 +210,16 @@ class HBNBCommand(cmd.Cmd):
                 count += 1
         print(count)
 
+    def do_drop(self, line):
+        """Drops all instances of a class"""
+        obj_dict = storage.all()
+        for key in obj_dict:
+            if line in key:
+                storage.delete(obj_dict[key])
+        storage.save()
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
+    if db:
+        storage.close()
