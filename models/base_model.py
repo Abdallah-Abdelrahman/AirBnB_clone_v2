@@ -58,3 +58,25 @@ class BaseModel:
         '''Instance representaion'''
         return '[{}] ({}) {}'.format(self.__class__.__name__,
                                      self.id, self.__dict__)
+
+
+def store(**kw):
+    '''Decorator to set class attributes base on
+    storage type.
+
+    Args:
+        kw: named arguments represents class attrs
+
+    Returns:
+        decorated class.
+    '''
+    from os import getenv
+
+    db = (False, True)['db' == getenv("HBNB_TYPE_STORAGE")]
+
+    def decorate(cls):
+        for k, v in kw.items():
+            setattr(cls, k, v if db else '')
+        return cls
+
+    return decorate

@@ -1,10 +1,14 @@
 #!/usr/bin/python3
 '''Module defines `User` class'''
 
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base, store
+from sqlalchemy import Column, String
 
 
-class User(BaseModel):
+@store(email=Column(String(128), nullable=False),
+       password=Column(String(128)),
+       first_name=Column(String(128)), last_name=Column(String(128)))
+class User(BaseModel, Base):
     '''User class.
 
     Atrrs:
@@ -13,7 +17,4 @@ class User(BaseModel):
         first_name(str):
         last_name(str):
     '''
-    email = ''
-    password = ''
-    first_name = ''
-    last_name = ''
+    __tablename__ = 'users'
