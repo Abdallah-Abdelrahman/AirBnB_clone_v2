@@ -95,7 +95,7 @@ class TestConsole_Base(unittest.TestCase):
 
     def test_help(self):
         """This function tests the expected output of the command help"""
-        cmds = ['EOF', 'all', 'count', 'create', 'destroy',
+        cmds = ['EOF', 'all', 'count', 'create', 'destroy', 'drop',
                 'help', 'quit', 'show', 'update']
         expected = ("Documented commands (type help <topic>):\n",
                     "========================================\n",

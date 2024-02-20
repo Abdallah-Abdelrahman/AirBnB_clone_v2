@@ -221,5 +221,5 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
-    if db:
-        storage.close()
+    # if db:
+    #     storage.close()
