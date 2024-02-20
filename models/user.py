@@ -6,7 +6,7 @@ from sqlalchemy import Column, String
 
 
 @store(email=Column(String(128), nullable=False),
-       password=Column(String(128)),
+       password=Column(String(128), nullable=False),
        first_name=Column(String(128)), last_name=Column(String(128)))
 class User(BaseModel, Base):
     '''User class.
