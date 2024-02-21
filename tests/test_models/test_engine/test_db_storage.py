@@ -100,6 +100,16 @@ class TestDBStorage(unittest.TestCase):
         self.storage.save()
         self.cursor.close()
 
+    def test_methods_exist(self):
+        '''Test the db storage has certain methods'''
+        methods = ['save', 'all', 'new', 'reload', 'delete']
+
+        self.assertIsInstance(storage, DBStorage)
+        funcs = [f[0] for f in inspect.getmembers(DBStorage,
+                                                  inspect.isfunction)]
+        for m in methods:
+            self.assertIn(m, funcs)
+
     def test_all(self):
         """Test the all method"""
         all_objs = self.storage.all()
@@ -158,6 +168,71 @@ class TestDBStorage(unittest.TestCase):
         all_objs = self.storage.all()
         self.assertIsInstance(all_objs, dict)
         self.assertEqual(len(all_objs), len(self.instances))
+
+class TestDBRelations(unittest.TestCase):
+    '''Test relations between classes that
+    mpas to tables in SQLAlchemy.
+    '''
+
+    def setUp(self):
+        '''Runs before each test method'''
+        self.storage = storage
+        self.instances = {}
+        self.instances['State'] = State(name="California")
+        self.instances['City'] = City(name="San Francisco",
+                                      state_id=self.instances['State'].id)
+        self.instances['User'] = User(email="user@mail.com", password="123",
+                                      name="John", last_name="Doe")
+        self.instances['Place'] = Place(name="House",
+                                        city_id=self.instances['City'].id,
+                                        user_id=self.instances['User'].id)
+        self.instances['Review'] = Review(text="Great place",
+                                          place_id=self.instances['Place'].id,
+                                          user_id=self.instances['User'].id)
+        self.instances['Amenity'] = Amenity(name="Wifi")
+        self.instances['Place'].amenities.append(self.instances['Amenity'])
+        for instance in self.instances.values():
+            instance.save()
+        self.storage.save()
+        self.cursor = create_cursor()
+
+    def tearDown(self):
+        '''Runs after each test'''
+        ignore = ['City', 'Review', 'Place']
+        for k, instance in self.instances.items():
+            if k not in ignore:
+                instance.delete()
+        self.storage.save()
+        self.cursor.close()
+
+    def test_relation_success(self):
+        '''Test relations between tables are well set'''
+        self.instances['State'] = State(name="California")
+        self.instances['City'] = City(name="San Francisco",
+                                      state_id=self.instances['State'].id)
+        self.instances['User'] = User(email="user@mail.com", password="123",
+                                      name="John", last_name="Doe")
+        self.instances['Place'] = Place(name="House",
+                                        city_id=self.instances['City'].id,
+                                        user_id=self.instances['User'].id)
+        self.instances['Review'] = Review(text="Great place",
+                                          place_id=self.instances['Place'].id,
+                                          user_id=self.instances['User'].id)
+        self.instances['Amenity'] = Amenity(name="Wifi")
+        self.instances['Place'].amenities.append(self.instances['Amenity'])
+        for instance in self.instances.values():
+            instance.save()
+
+    def test_relation_failure(self):
+        '''Test relations between tables are not well set'''
+        with self.assertRaises(Exception):
+            self.instances['City'] = City(name="San Francisco",
+                                          state_id=None)
+
+        self.instances['City'] = City(name="San Francisco",
+                                      state_id='123')
+
+
 
 
 if __name__ == '__main__':
