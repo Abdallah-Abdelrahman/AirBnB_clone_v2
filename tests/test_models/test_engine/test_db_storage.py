@@ -15,7 +15,7 @@ from models import storage, db
 from models.state import State
 from models.city import City
 from models.user import User
-from models.place import Place, place_amenity
+from models.place import Place
 from models.review import Review
 from models.amenity import Amenity
 import MySQLdb
@@ -169,7 +169,9 @@ class TestDBStorage(unittest.TestCase):
         self.assertIsInstance(all_objs, dict)
         self.assertEqual(len(all_objs), len(self.instances))
 
-class TestDBRelations(unittest.TestCase):
+
+@unittest.skipIf(not db, "db")
+class TestDBStorageRelations(unittest.TestCase):
     '''Test relations between classes that
     mpas to tables in SQLAlchemy.
     '''
@@ -205,34 +207,56 @@ class TestDBRelations(unittest.TestCase):
         self.storage.save()
         self.cursor.close()
 
-    def test_relation_success(self):
-        '''Test relations between tables are well set'''
-        self.instances['State'] = State(name="California")
-        self.instances['City'] = City(name="San Francisco",
-                                      state_id=self.instances['State'].id)
-        self.instances['User'] = User(email="user@mail.com", password="123",
-                                      name="John", last_name="Doe")
-        self.instances['Place'] = Place(name="House",
-                                        city_id=self.instances['City'].id,
-                                        user_id=self.instances['User'].id)
-        self.instances['Review'] = Review(text="Great place",
-                                          place_id=self.instances['Place'].id,
-                                          user_id=self.instances['User'].id)
-        self.instances['Amenity'] = Amenity(name="Wifi")
-        self.instances['Place'].amenities.append(self.instances['Amenity'])
-        for instance in self.instances.values():
-            instance.save()
+    def test_relation_State_City(self):
+        '''Test relations between State and City tables'''
+        cities = self.instances['State'].cities
+        for city in cities:
+            self.assertEqual(city.state_id, self.instances['State'].id)
+            self.assertEqual(city.state, self.instances['State'])
+            self.assertEqual(city.name, self.instances['City'].name)
+            self.assertEqual(city.id, self.instances['City'].id)
+
+    def test_relation_City_Place_Amenity(self):
+        '''Test relations between tables City, Place and Amenity'''
+        places = self.instances['City'].places
+        for place in places:
+            self.assertEqual(place.city_id, self.instances['City'].id)
+            self.assertEqual(place.name, self.instances['Place'].name)
+            self.assertEqual(place.id, self.instances['Place'].id)
+            for amenity in place.amenities:
+                self.assertIn(amenity, self.instances['Place'].amenities)
+
+    def test_relation_User_Place_Review(self):
+        '''Test relations between tables User, Place and Review'''
+        import warnings
+        from sqlalchemy.exc import SAWarning
+        warnings.simplefilter('ignore', category=SAWarning)
+        reviews_user = self.instances['User'].reviews
+        reviews_place = self.instances['Place'].reviews
+        self.assertEqual(reviews_user, reviews_place)
+        for review in reviews_user:
+            self.assertEqual(review.user_id, self.instances['User'].id)
+            self.assertEqual(review.place_id, self.instances['Place'].id)
+            self.assertEqual(review.text, self.instances['Review'].text)
+            self.assertEqual(review.id, self.instances['Review'].id)
 
     def test_relation_failure(self):
         '''Test relations between tables are not well set'''
-        with self.assertRaises(Exception):
-            self.instances['City'] = City(name="San Francisco",
-                                          state_id=None)
+        from sqlalchemy.exc import PendingRollbackError, OperationalError
+        from io import StringIO as StringIO
+        from contextlib import redirect_stderr
+        from unittest.mock import patch
 
-        self.instances['City'] = City(name="San Francisco",
-                                      state_id='123')
-
-
+        self.instances['Place1'] = Place(name="San")
+        # with patch("sys.stdout", new=StringIO()) as _:
+        # suppress the error message
+        with patch("sys.stderr", new=StringIO()) as _:
+            with self.assertRaises((PendingRollbackError,
+                                    MySQLdb.OperationalError,
+                                    OperationalError)):
+                self.instances['Place1'].save()
+        self.storage.rollback()
+        del self.instances['Place1']
 
 
 if __name__ == '__main__':

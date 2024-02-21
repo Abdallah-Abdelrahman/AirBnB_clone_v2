@@ -101,7 +101,6 @@ class HBNBCommand(cmd.Cmd):
                 v = v.replace('_', ' ').replace('"', '')
             setattr(obj, k, v)
         obj.save()
-        # storage.save()
         print(obj.id)
 
     def do_show(self, line):
