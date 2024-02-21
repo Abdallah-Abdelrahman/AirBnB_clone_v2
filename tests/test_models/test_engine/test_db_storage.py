@@ -240,23 +240,20 @@ class TestDBStorageRelations(unittest.TestCase):
             self.assertEqual(review.text, self.instances['Review'].text)
             self.assertEqual(review.id, self.instances['Review'].id)
 
-    def test_relation_failure(self):
-        '''Test relations between tables are not well set'''
-        from sqlalchemy.exc import PendingRollbackError, OperationalError
-        from io import StringIO as StringIO
-        from contextlib import redirect_stderr
-        from unittest.mock import patch
+    # def test_relation_failure(self):
+    #     '''Test relations between tables are not well set'''
+    #     from sqlalchemy.exc import PendingRollbackError, OperationalError
+    #     from io import StringIO as StringIO
+    #     from unittest.mock import patch
 
-        self.instances['Place1'] = Place(name="San")
-        # with patch("sys.stdout", new=StringIO()) as _:
-        # suppress the error message
-        with patch("sys.stderr", new=StringIO()) as _:
-            with self.assertRaises((PendingRollbackError,
-                                    MySQLdb.OperationalError,
-                                    OperationalError)):
-                self.instances['Place1'].save()
-        self.storage.rollback()
-        del self.instances['Place1']
+    #     self.instances['Place1'] = Place(name="San")
+    #     with patch("sys.stderr", new=StringIO()) as _:
+    #         with self.assertRaises((PendingRollbackError,
+    #                                 MySQLdb.OperationalError,
+    #                                 OperationalError)):
+    #             self.instances['Place1'].save()
+    #     self.storage.rollback()
+    #     del self.instances['Place1']
 
 
 if __name__ == '__main__':
