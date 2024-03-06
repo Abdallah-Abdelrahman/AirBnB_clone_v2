@@ -9,7 +9,15 @@ LOCATION="location /hbnb_static {\n\t\talias $LINK_NAME;\n\t}"
 
 mkdir -p /data/web_static/{releases,shared}
 mkdir -p /data/web_static/releases/test/
-echo 'This is a test 0_o' > /data/web_static/releases/test/index.html
+cat << EOF > /data/web_static/releases/test/index.html
+<html>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
+</html>
+EOF
 
 # if link exists; remove it, and create it everytime script runs
 [ -L "$LINK_NAME" ] && rm "$LINK_NAME"
@@ -17,7 +25,7 @@ echo 'This is a test 0_o' > /data/web_static/releases/test/index.html
 ln -s /data/web_static/releases/test/ "$LINK_NAME"
 
 # assign ownership
-chown -R /data/ ubuntu:ubuntu
+chown -R ubuntu:ubuntu /data/
 
 # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
 # (ex: https://mydomainname.tech/hbnb_static
