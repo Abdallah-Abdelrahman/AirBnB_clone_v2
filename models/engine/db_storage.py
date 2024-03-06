@@ -101,3 +101,8 @@ class DBStorage:
         """
         if cls:
             self.__session.query(cls).delete()
+
+    def rollback(self):
+        """rollback all changes
+        """
+        self.__session.rollback()
