@@ -25,7 +25,7 @@ def do_deploy(archive_path):
         put(archive_path, '/tmp/')
         run(f'mkdir -p {target}')
         run(f'tar -xzf /tmp/{archive}.tgz -C {target}')
-        run(f'/tmp/{archive}.tgz')
+        run(f'rm /tmp/{archive}.tgz')
         run(f'mv /data/web_static/releases/{archive}/web_static/* {target}')
         run(f'rm -rf /data/web_static/releases/{archive}/web_static')
         # remove symbolic link
