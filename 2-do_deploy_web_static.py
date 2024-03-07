@@ -8,6 +8,7 @@ from os.path import exists
 env.user = 'ubuntu'
 env.hosts = ['52.91.118.253', '35.153.16.72']
 
+
 def do_deploy(archive_path):
     '''Distributes an archive to my web servers'''
     if not exists(archive_path):
@@ -26,5 +27,6 @@ def do_deploy(archive_path):
         run('rm -rf /data/web_static/current')
         # create new link
         run(f'ln -s {target} /data/web_static/current')
+        return True
     except Exception:
         return False
