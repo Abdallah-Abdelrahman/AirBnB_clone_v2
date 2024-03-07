@@ -56,7 +56,7 @@ server {
                 internal;
         }
 	location /hbnb_static {
-		alias /data/web_static/current;
+		alias /data/web_static/current/;
 	}
 }
 EOF
