@@ -7,3 +7,4 @@ test_save_reload_base_model.py
 test_params_create
 main_place_amenities.py
 venv
+install*

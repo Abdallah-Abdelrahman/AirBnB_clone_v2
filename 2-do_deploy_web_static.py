@@ -5,12 +5,13 @@ from fabric.api import run, put, env
 from os.path import exists
 
 
+env.user = 'ubuntu'
+env.hosts = ['52.91.118.253', '35.153.16.72']
+
 def do_deploy(archive_path):
     '''Distributes an archive to my web servers'''
     if not exists(archive_path):
         return False
-    env.user = 'ubuntu'
-    env.hosts = ['512726-web-01', '512726-web-02']
 
     try:
         archive = archive_path.split('/')[-1].split('.')[0]
