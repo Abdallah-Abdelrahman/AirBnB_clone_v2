@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 '''script (based on the file 1-pack_web_static.py) that distributes an archive
-to your web servers, using the function do_deploy'''
+to your web servers, using the function do_deploy
+
+Attrs:
+    env: enviroment variables for fabric
+'''
 from fabric.api import run, put, env
 from os.path import exists
 
@@ -16,13 +20,14 @@ def do_deploy(archive_path):
 
     try:
         archive = archive_path.split('/')[-1].split('.')[0]
-        target = '/data/web_static/releases/'+archive
+        target = f'/data/web_static/releases/{archive}/'
         # upload archive to /tmp/
         put(archive_path, '/tmp/')
         run(f'mkdir -p {target}')
         run(f'tar -xzf /tmp/{archive}.tgz -C {target}')
+        run(f'/tmp/{archive}.tgz')
         run(f'mv /data/web_static/releases/{archive}/web_static/* {target}')
-        run(f"rm -rf /data/web_static/releases/{archive}/web_static")
+        run(f'rm -rf /data/web_static/releases/{archive}/web_static')
         # remove symbolic link
         run('rm -rf /data/web_static/current')
         # create new link
