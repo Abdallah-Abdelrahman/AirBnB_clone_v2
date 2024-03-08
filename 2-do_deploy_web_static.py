@@ -11,6 +11,7 @@ from os.path import exists
 
 env.user = 'ubuntu'
 env.hosts = ['52.91.118.253', '35.153.16.72']
+env.key_filename = '~/.ssh/school'
 
 
 def do_deploy(archive_path):
@@ -19,19 +20,21 @@ def do_deploy(archive_path):
         return False
 
     try:
+        # extract archive name w/out extension
         archive = archive_path.split('/')[-1].split('.')[0]
-        target = f'/data/web_static/releases/{archive}/'
+        target = f'/data/web_static/releases/{archive}'
         # upload archive to /tmp/
         put(archive_path, '/tmp/')
         run(f'mkdir -p {target}')
         run(f'tar -xzf /tmp/{archive}.tgz -C {target}')
         run(f'rm /tmp/{archive}.tgz')
-        run(f'mv /data/web_static/releases/{archive}/web_static/* {target}')
-        run(f'rm -rf /data/web_static/releases/{archive}/web_static')
+        run(f'mv {target}/web_static/* {target}')
+        run(f'rm -rf {target}/web_static')
         # remove symbolic link
         run('rm -rf /data/web_static/current')
         # create new link
         run(f'ln -s {target} /data/web_static/current')
+
         return True
     except Exception:
         return False
