@@ -15,7 +15,7 @@ def do_clean(number=0):
     try:
         # context manger for local
         with lcd('versions/'):
-            versions = local('ls -t versions/', capture=True).split()
+            versions = local('ls -t', capture=True).split()
             versions = versions[1:] if number <= 1 else versions[number:]
             for v in versions:
                 local(f'rm -rf versions/{v}')
@@ -23,7 +23,7 @@ def do_clean(number=0):
         # context manger for remote
         with cd('/data/web_static/releases'):
             number = 2 if number <= 1 else number + 1
-            run(f'ls -t /data/web_static/releases|tail +{number}|xargs rm -rf')
+            run(f'ls -t | tail +{number} | xargs rm -rf')
 
     except Exception:
         pass
