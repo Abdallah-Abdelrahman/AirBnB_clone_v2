@@ -14,10 +14,10 @@ def do_clean(number=0):
     '''clean'''
     res = listdir('versions')
     number = int(number)
-    versions = res[1:] if (number) <= 1 else res[2:]
+    versions = res[1:] if (number) <= 1 else res[number:]
     # get archives sort from most recents
     releases = run('ls -t /data/web_static/releases').strip().split()
-    rels = releases[1:] if (number) <= 1 else releases[2:]
+    rels = releases[1:] if (number) <= 1 else releases[number:]
 
     for v in versions:
         local(f'rm -rf versions/{v}')
