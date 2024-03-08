@@ -13,11 +13,13 @@ env.key_filename = '~/.ssh/school'
 def do_clean(number=0):
     '''clean'''
     res = listdir('versions')
-    versions = res[1:] if number == 0 or number == 1 else res[2:]
-    releases = run('ls -t /data/web_static/releases').split(' ')
-    rels = releases[1:] if number == 0 or number == 1 else releases[2:]
+    number = int(number)
+    versions = res[1:] if (number) <= 1 else res[2:]
+    # get archives sort from most recents
+    releases = run('ls -t /data/web_static/releases').strip().split()
+    rels = releases[1:] if (number) <= 1 else releases[2:]
 
     for v in versions:
-        local(f'rm -r {v}')
+        local(f'rm -rf versions/{v}')
     for rel in rels:
-        run(f'rm -r {rel}')
+        run(f'rm -rf /data/web_static/releases/{rel}')
