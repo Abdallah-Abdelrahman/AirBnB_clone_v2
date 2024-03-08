@@ -22,10 +22,8 @@ def do_clean(number=0):
 
         # context manger for remote
         with cd('/data/web_static/releases'):
-            releases = run('ls -t /data/web_static/releases').split()
-            rels = releases[1:] if number <= 1 else releases[number:]
-            for rel in rels:
-                run(f'rm -rf /data/web_static/releases/{rel}')
+            number = 2 if number <= 1 else number + 1
+            run(f'ls -t /data/web_static/releases|tail +{number}|xargs rm -rf')
 
     except Exception:
         pass
