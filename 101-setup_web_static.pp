@@ -26,7 +26,7 @@ file {'/data/web_static/current':
 # change ownership recursively
 # exec {'chown -R ubuntu:ubuntu /data/': path => '/usr/bin/:/usr/local/bin/:/bin/',}
 file { '/data':
-  ensure  => 'directory',
+  ensure  => directory,
   owner   => 'ubuntu',
   group   => 'ubuntu',
   recurse => true,
@@ -66,9 +66,9 @@ file {'/etc/nginx/sites-enabled/default':
   require => Package['nginx'],
 }
 
-service {'nginx':
-  ensure    => running,
-  enable    => true,
-  require   => File['/etc/nginx/sites-enabled/default'],
-  subscribe => File['/etc/nginx/sites-enabled/default'],
+service { 'nginx':
+  ensure      => running,
+  enable      => true,
+  subscribe   => File['/etc/nginx/nginx.conf'],
+  refreshonly => true,
 }
