@@ -18,7 +18,7 @@ file {'/data/web_static/releases/test/index.html':
   require => File['/data/web_static/releases/test/']
 }
 
-exec {'ln -s /data/web_static/current /data/web_static/releases/test/': path => '/usr/bin/:/usr/local/bin/:/bin/'}
+exec {'ln -s /data/web_static/releases/test/ /data/web_static/current': path => '/usr/bin/:/usr/local/bin/:/bin/'}
 
 #file {'/data/web_static/current':
 #  ensure => link,
