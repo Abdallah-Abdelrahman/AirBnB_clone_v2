@@ -18,10 +18,12 @@ file {'/data/web_static/releases/test/index.html':
   require => File['/data/web_static/releases/test/']
 }
 
-file {'/data/web_static/current':
-  ensure  => link,
-  target  => '/data/web_static/releases/test/'
-}
+exec {'ln -s /data/web_static/current /data/web_static/releases/test/': path => '/usr/bin/:/usr/local/bin/:/bin/'}
+
+#file {'/data/web_static/current':
+#  ensure => link,
+#  target => '/data/web_static/releases/test/'
+#}
 
 # change ownership recursively
 exec {'chown -R ubuntu:ubuntu /data/': path => '/usr/bin/:/usr/local/bin/:/bin/',}
@@ -62,8 +64,8 @@ file {'/etc/nginx/sites-enabled/default':
 }
 
 service {'nginx':
-  ensure    => 'running',
+  ensure    => running,
   enable    => true,
-  require   => File['/etc/nginx/sites-enabled/default'],  # Ensure the Nginx configuration file is present before restarting the service
-  subscribe => File['/etc/nginx/sites-enabled/default'], # Restart the service whenever the configuration file changes
+  require   => File['/etc/nginx/sites-enabled/default'],
+  subscribe => File['/etc/nginx/sites-enabled/default'],
 }
