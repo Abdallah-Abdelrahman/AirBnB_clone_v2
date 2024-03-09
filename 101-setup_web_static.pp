@@ -1,9 +1,9 @@
 # puppet manifest to configure nginx
 $dirs = ['/data/', '/data/web_static/', '/data/web_static/releases', '/data/web_static/shared', '/data/web_static/releases/test/']
 
-package {'nginx': ensure => installed}
+package {'nginx': ensure => present}
 
-file {$dirs: ensure => directory}
+file {$dirs: ensure => 'directory'}
 file {'/data/web_static/releases/test/index.html':
   ensure  => file,
   content => '
@@ -16,8 +16,7 @@ file {'/data/web_static/releases/test/index.html':
     </html>',
   require => File['/data/web_static/releases/test/']
 }
-file {'/data/web_static/current': ensure => absent}
-file {'/data/web_static/current': ensure => link, target => '/data/web_static/releases/test/'}
+file {'/data/web_static/current': ensure => 'link', target => '/data/web_static/releases/test/'}
 
 # change ownership
 exec {'chown -R ubuntu:ubuntu /data/':
@@ -26,7 +25,7 @@ exec {'chown -R ubuntu:ubuntu /data/':
 }
 
 file {'/etc/nginx/sites-enabled/default':
-  ensure  => file,
+  ensure  => present,
   content => "server {
 	add_header X-Served-By ${hostname};
 
@@ -60,8 +59,7 @@ file {'/etc/nginx/sites-enabled/default':
   require => Package['nginx'],
 }
 
-service {'nginx':
-  ensure  => running,
-  enable  => true,
+exec {'nginx restart':
+  path    => '/etc/init.d/',
   require => File['/etc/nginx/sites-enabled/default'],
 }
