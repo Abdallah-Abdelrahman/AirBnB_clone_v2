@@ -61,9 +61,8 @@ file {'/etc/nginx/sites-enabled/default':
   require => Package['nginx'],
 }
 
-service { 'nginx':
-  ensure      => running,
-  enable      => true,
-  subscribe   => File['/etc/nginx/nginx.conf'],
-  refreshonly => true,
+service {'nginx':
+  ensure    => running,
+  enable    => true,
+  subscribe => File['/etc/nginx/sites-enabled/default'],
 }
