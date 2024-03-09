@@ -1,24 +1,24 @@
-# puppet manifest
+# puppet manifest to configure nginx
+$dirs = ['/data/', '/data/web_static/', '/data/web_static/releases', '/data/web_static/shared', '/data/web_static/releases/test/']
+
 package {'nginx': ensure => installed}
-file {'/data/': ensure => directory}
-file {'/data/web_static/': ensure => directory}
-file {'/data/web_static/releases': ensure => directory}
-file {'/data/web_static/shared': ensure => directory}
-file {'/data/web_static/releases/test/': ensure => directory}
+
+file {$dirs: ensure => directory}
 file {'/data/web_static/releases/test/index.html':
   ensure  => file,
   content => '
-<html>
-  <head>
-  </head>
-  <body>
-    Holberton School
-  </body>
-</html>',
+    <html>
+      <head>
+      </head>
+      <body>
+        Holberton School
+      </body>
+    </html>',
+  require => File['/data/web_static/releases/test/']
 }
 file {'/data/web_static/current': ensure => absent}
 file {'/data/web_static/current': ensure => link, target => '/data/web_static/releases/test/'}
-file {'/data/': ensure => directory, owner => ubuntu, group => ubuntu}
+file {'/data/': ensure => directory, owner => ubuntu, group => ubuntu, recurse => true}
 file {'/etc/nginx/sites-enabled/default':
   ensure  => file,
   content => "server {
