@@ -1,4 +1,5 @@
 # puppet manifest
+package {'nginx': ensure => installed}
 file {'/data/web_static/releases': ensure => directory}
 file {'/data/web_static/shared': ensure => directory}
 file {'/data/web_static/releases/test/': ensure => directory}

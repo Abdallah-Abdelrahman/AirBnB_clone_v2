@@ -10,7 +10,12 @@ env.key_filename = '~/.ssh/school'
 
 
 def do_clean(number=0):
-    '''clean'''
+    '''clean generated archives
+    Args:
+        number: number of archives to exclude
+    Note:
+        the cleaning deletes less recent ones
+    '''
     number = int(number)
     try:
         # context manger for local
