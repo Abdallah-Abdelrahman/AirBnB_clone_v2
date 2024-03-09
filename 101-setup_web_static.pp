@@ -18,16 +18,19 @@ file {'/data/web_static/releases/test/index.html':
   require => File['/data/web_static/releases/test/']
 }
 
-exec {'ln -s /data/web_static/releases/test/ /data/web_static/current': path => '/usr/bin/:/usr/local/bin/:/bin/'}
-
-#file {'/data/web_static/current':
-#  ensure => link,
-#  target => '/data/web_static/releases/test/'
-#}
+file {'/data/web_static/current':
+  ensure => link,
+  target => '/data/web_static/releases/test/'
+}
 
 # change ownership recursively
-exec {'chown -R ubuntu:ubuntu /data/': path => '/usr/bin/:/usr/local/bin/:/bin/',}
-
+# exec {'chown -R ubuntu:ubuntu /data/': path => '/usr/bin/:/usr/local/bin/:/bin/',}
+file { '/data':
+  ensure  => 'directory',
+  owner   => 'ubuntu',
+  group   => 'ubuntu',
+  recurse => true,
+}
 file {'/etc/nginx/sites-enabled/default':
   ensure  => present,
   content => "server {
