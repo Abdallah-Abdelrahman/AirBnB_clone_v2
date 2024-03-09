@@ -3,7 +3,7 @@ $dirs = ['/data/', '/data/web_static/', '/data/web_static/releases', '/data/web_
 
 package {'nginx': ensure => installed}
 
-file {$dirs: ensure => directory}
+file {$dirs: ensure => directory, owner => ubuntu, group => ubuntu, recurse => true}
 file {'/data/web_static/releases/test/index.html':
   ensure  => file,
   content => '
@@ -18,7 +18,6 @@ file {'/data/web_static/releases/test/index.html':
 }
 file {'/data/web_static/current': ensure => absent}
 file {'/data/web_static/current': ensure => link, target => '/data/web_static/releases/test/'}
-file {'/data/': ensure => directory, owner => ubuntu, group => ubuntu, recurse => true}
 file {'/etc/nginx/sites-enabled/default':
   ensure  => file,
   content => "server {
