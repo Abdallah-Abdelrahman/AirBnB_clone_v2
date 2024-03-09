@@ -18,7 +18,7 @@ def do_clean(number=0):
             versions = local('ls -t', capture=True).split()
             versions = versions[1:] if number <= 1 else versions[number:]
             for v in versions:
-                local(f'rm -rf versions/{v}')
+                local(f'rm -rf {v}')
 
         # context manger for remote
         with cd('/data/web_static/releases'):
