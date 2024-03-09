@@ -57,7 +57,6 @@ file {'/etc/nginx/sites-enabled/default':
         }
 	location /hbnb_static {
 		alias /data/web_static/current/;
-		index.html;
 	}
   }",
   require => Package['nginx'],
