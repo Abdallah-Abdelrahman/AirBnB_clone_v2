@@ -1,28 +1,25 @@
 # puppet manifest to configure nginx
 $dirs = ['/data/', '/data/web_static/', '/data/web_static/releases', '/data/web_static/shared', '/data/web_static/releases/test/']
 
-package {'nginx': ensure => present}
+package {'nginx': ensure => installed}
 
 file {$dirs: ensure => 'directory'}
 file {'/data/web_static/releases/test/index.html':
   ensure  => file,
-  content => '
-    <html>
+  content => '<html>
       <head>
       </head>
       <body>
         Holberton School
       </body>
-    </html>',
+    </html>'
+    ,
   require => File['/data/web_static/releases/test/']
 }
 file {'/data/web_static/current': ensure => 'link', target => '/data/web_static/releases/test/'}
 
 # change ownership recursively
-exec {'chown -R ubuntu:ubuntu /data/':
-  path    => '/usr/bin/:/usr/local/bin/:/bin/',
-  require => File['/data/web_static/current'],
-}
+exec {'chown -R ubuntu:ubuntu /data/': path => '/usr/bin/:/usr/local/bin/:/bin/',}
 
 file {'/etc/nginx/sites-enabled/default':
   ensure  => present,
