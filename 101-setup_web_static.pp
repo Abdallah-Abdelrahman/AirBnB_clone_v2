@@ -1,9 +1,10 @@
 # puppet manifest to configure nginx
-$dirs = ['/data/', '/data/web_static/', '/data/web_static/releases', '/data/web_static/shared', '/data/web_static/releases/test/']
+$dirs = ['/data/', '/data/web_static', '/data/web_static/releases', '/data/web_static/shared', '/data/web_static/releases/test']
 
 package {'nginx': ensure => installed}
 
-file {$dirs: ensure => 'directory'}
+file {$dirs: ensure => directory, require => Package['nginx']}
+
 file {'/data/web_static/releases/test/index.html':
   ensure  => file,
   content => '<html>
@@ -16,7 +17,12 @@ file {'/data/web_static/releases/test/index.html':
     ,
   require => File['/data/web_static/releases/test/']
 }
-file {'/data/web_static/current': ensure => 'link', target => '/data/web_static/releases/test/'}
+
+file {'/data/web_static/current':
+  ensure  => link,
+  target  => '/data/web_static/releases/test/'
+  require => Package['nginx'],
+}
 
 # change ownership recursively
 exec {'chown -R ubuntu:ubuntu /data/': path => '/usr/bin/:/usr/local/bin/:/bin/',}
@@ -51,12 +57,13 @@ file {'/etc/nginx/sites-enabled/default':
         }
 	location /hbnb_static {
 		alias /data/web_static/current/;
+		index.html;
 	}
   }",
   require => Package['nginx'],
 }
 
-service { 'nginx':
+service {'nginx':
   ensure    => 'running',
   enable    => true,
   require   => File['/etc/nginx/sites-enabled/default'],  # Ensure the Nginx configuration file is present before restarting the service
