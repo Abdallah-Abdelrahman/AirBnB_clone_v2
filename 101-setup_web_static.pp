@@ -3,7 +3,7 @@ $dirs = ['/data/', '/data/web_static/', '/data/web_static/releases', '/data/web_
 
 package {'nginx': ensure => installed}
 
-file {$dirs: ensure => directory, owner => ubuntu, group => ubuntu, recurse => true}
+file {$dirs: ensure => directory}
 file {'/data/web_static/releases/test/index.html':
   ensure  => file,
   content => '
@@ -18,6 +18,13 @@ file {'/data/web_static/releases/test/index.html':
 }
 file {'/data/web_static/current': ensure => absent}
 file {'/data/web_static/current': ensure => link, target => '/data/web_static/releases/test/'}
+
+# change ownership
+exec {'chown -R ubuntu:ubuntu /data/':
+  path    => '/usr/bin/:/usr/local/bin/:/bin/',
+  require => File['/data/web_static/current'],
+}
+
 file {'/etc/nginx/sites-enabled/default':
   ensure  => file,
   content => "server {
