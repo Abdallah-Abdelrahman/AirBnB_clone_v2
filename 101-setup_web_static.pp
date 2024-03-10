@@ -61,8 +61,8 @@ file {'/etc/nginx/sites-enabled/default':
   require => Package['nginx'],
 }
 
-service {'nginx':
-  ensure    => running,
-  enable    => true,
-  subscribe => File['/etc/nginx/sites-enabled/default'],
+# Restart Nginx
+exec { 'nginx restart':
+  path    => '/etc/init.d/',
+  require => File['/etc/nginx/sites-available/default'],
 }
