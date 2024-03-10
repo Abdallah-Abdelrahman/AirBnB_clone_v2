@@ -1,7 +1,7 @@
 # puppet manifest to configure nginx
 $dirs = ['/data/', '/data/web_static', '/data/web_static/releases', '/data/web_static/shared', '/data/web_static/releases/test']
 
-package {'nginx': ensure => installed}
+package {'nginx': ensure => present, provider => 'apt'}
 
 file {$dirs: ensure => directory, require => Package['nginx']}
 
@@ -60,6 +60,17 @@ file {'/etc/nginx/sites-enabled/default':
 		alias /data/web_static/current/;
 	}
   }",
+  require => File['/var/www/html'],
+}
+file { '/var/www/html/index.html':
+  ensure  => 'present',
+  content => "Holberton School\n",
+  require => File['/var/www/html'],
+}
+
+file { '/var/www/html/custom_404.html':
+  ensure  => 'present',
+  content => "Ceci n'est pas une page\n",
   require => File['/var/www/html'],
 }
 
