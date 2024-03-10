@@ -19,16 +19,17 @@ file {'/data/web_static/releases/test/index.html':
 }
 
 file {'/data/web_static/current':
-  ensure => link,
-  target => '/data/web_static/releases/test/'
+  ensure  => link,
+  target  => '/data/web_static/releases/test/',
+  require => '/data/web_static/releases/test/index.html'
 }
 
 # change ownership recursively
-exec {'chown -R ubuntu:ubuntu /data/': path => '/usr/bin/:/usr/local/bin/:/bin/',}
+exec {'chown -R ubuntu:ubuntu /data/': path => '/usr/bin/:/usr/local/bin/:/bin/', require => File['/data/web_static/current']}
 
 file {'/var/www/html': ensure => present}
 
-file {'/etc/nginx/sites-enabled/default':
+file {'/etc/nginx/sites-available/default':
   ensure  => present,
   content => "server {
 	add_header X-Served-By ${hostname};
@@ -77,5 +78,5 @@ file { '/var/www/html/custom_404.html':
 # Restart Nginx
 exec { 'nginx restart':
   path    => '/etc/init.d/',
-  require => File['/etc/nginx/sites-enabled/default'],
+  require => File['/etc/nginx/sites-available/default'],
 }
