@@ -5,7 +5,7 @@ to your web servers, using the function do_deploy
 Attrs:
     env: enviroment variables for fabric
 '''
-from fabric.api import run, put, env
+from fabric.api import run, put, env, sudo
 from os.path import exists
 
 
@@ -26,15 +26,15 @@ def do_deploy(archive_path):
         opts = '-a --remove-source-files'
         # upload archive to /tmp/
         put(archive_path, '/tmp/')
-        run(f'mkdir -p {target}')
-        run(f'tar -xzf /tmp/{archive}.tgz -C {target}')
-        run(f'rm /tmp/{archive}.tgz')
-        run(f'rsync {opts} {target}/web_static/ {target}')
-        run(f'rm -rf {target}/web_static')
+        sudo(f'mkdir -p {target}')
+        sudo(f'tar -xzf /tmp/{archive}.tgz -C {target}')
+        sudo(f'rm /tmp/{archive}.tgz')
+        sudo(f'rsync {opts} {target}/web_static/ {target}')
+        sudo(f'rm -rf {target}/web_static')
         # remove symbolic link
-        run('rm -rf /data/web_static/current')
+        sudo('rm -rf /data/web_static/current')
         # create new link
-        run(f'ln -s {target} /data/web_static/current')
+        sudo(f'ln -s {target} /data/web_static/current')
 
         return True
     except Exception:
