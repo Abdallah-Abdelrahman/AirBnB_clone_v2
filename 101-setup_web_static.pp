@@ -26,6 +26,8 @@ file {'/data/web_static/current':
 # change ownership recursively
 exec {'chown -R ubuntu:ubuntu /data/': path => '/usr/bin/:/usr/local/bin/:/bin/',}
 
+file {'/var/www/html': ensure => present}
+
 file {'/etc/nginx/sites-enabled/default':
   ensure  => present,
   content => "server {
