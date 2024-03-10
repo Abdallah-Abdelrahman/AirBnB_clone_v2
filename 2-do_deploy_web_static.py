@@ -40,13 +40,12 @@ def do_deploy(archive_path):
         # extract archive name w/out extension
         archive = archive_path.split('/')[-1].split('.')[0]
         target = f'/data/web_static/releases/{archive}'
-        opts = '-a --remove-source-files'
         # upload archive to /tmp/
         put(archive_path, '/tmp/')
         sudo(f'mkdir -p {target}')
         sudo(f'tar -xzf /tmp/{archive}.tgz -C {target}')
         sudo(f'rm /tmp/{archive}.tgz')
-        sudo(f'rsync {opts} {target}/web_static/ {target}')
+        sudo(f'rsync -a {target}/web_static/ {target}')
         sudo(f'rm -rf {target}/web_static')
         # remove symbolic link
         sudo('rm -rf /data/web_static/current')
