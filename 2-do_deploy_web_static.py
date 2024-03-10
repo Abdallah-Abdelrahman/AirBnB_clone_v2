@@ -29,6 +29,8 @@ def do_pack():
         return f'versions/{archive}'
     except Exception:
         return None
+
+
 def do_deploy(archive_path):
     '''Distributes an archive to my web servers'''
     if not exists(archive_path):
