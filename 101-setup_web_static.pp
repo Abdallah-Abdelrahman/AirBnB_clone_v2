@@ -58,7 +58,7 @@ file {'/etc/nginx/sites-enabled/default':
 		alias /data/web_static/current/;
 	}
   }",
-  require => Package['nginx'],
+  require => File['/var/www/html'],
 }
 
 # Restart Nginx
