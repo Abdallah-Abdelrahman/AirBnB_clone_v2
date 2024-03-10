@@ -23,7 +23,7 @@ def do_deploy(archive_path):
         # extract archive name w/out extension
         archive = archive_path.split('/')[-1].split('.')[0]
         target = f'/data/web_static/releases/{archive}'
-        opts = '-arctuxz --remove-source-files'
+        opts = '-a --remove-source-files'
         # upload archive to /tmp/
         put(archive_path, '/tmp/')
         run(f'mkdir -p {target}')
