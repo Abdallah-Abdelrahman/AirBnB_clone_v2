@@ -8,3 +8,4 @@ test_params_create
 main_place_amenities.py
 venv
 install*
+7-dump.sql
