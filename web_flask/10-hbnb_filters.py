@@ -2,6 +2,8 @@
 '''starts a Flask web application'''
 from models import storage
 from models.state import State
+from models.city import City
+from models.amenity import Amenity
 from flask import Flask, render_template
 
 
@@ -21,7 +23,9 @@ def teardown_db(exception):
 def state_city():
     '''list statues and cities'''
     states = storage.all(State)
-    return render_template('10-hbnb_filters.html', states=states)
+    amenities = storage.all(Amenity)
+    return render_template('10-hbnb_filters.html',
+                           states=states, amenities=amenities)
 
 
 if __name__ == '__main__':
