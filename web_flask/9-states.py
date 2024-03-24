@@ -17,18 +17,18 @@ def teardown_db(exception):
     storage.close()
 
 
-@app.route('/states', strict_slashes=False)
-def state():
-    '''list statues'''
-    states = storage.all(State)
-    return render_template('7-states_list.html', states=states)
-
-
+@app.route('/states/', defaults={'id': None}, strict_slashes=False)
 @app.route('/states/<id>', strict_slashes=False)
 def state_by_id(id):
     '''get state by id'''
-    state = next((s for k, s in storage.all(State).items() if id == s.id), '')
-    return render_template('9-states.html', state=state)
+    states = storage.all(State)
+    state = id
+
+    if id is not None:
+        state = next((s for s in storage.all(State).values()
+                      if id == s.id), '')
+
+    return render_template('9-states.html', states=states, state=state)
 
 
 if __name__ == '__main__':
