@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zxx">
+    <head>
+        {% block head %}
+		<title>AirBnB</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Static web page that's a copy of AirBnB website">
+		<meta name="author" content="Abdallah Abdelrahman">
+		<link rel="icon" href="static/images/icon.png">
+		<link href="static/styles/4-common.css" rel="stylesheet">
+		<link href="static/styles/3-header.css" rel="stylesheet">
+		<link href="static/styles/3-footer.css" rel="stylesheet">
+		<link href="static/styles/6-filters.css" rel="stylesheet">
+        {% endblock %}
+    </head>
+    <body>
+		<header></header>
+        <div class="container">{% block container %}{% endblock %}</div>
+        <footer>
+            <span>best school</span>
+        </footer>
+</body>
+</html>

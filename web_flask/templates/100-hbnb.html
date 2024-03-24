@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+<link href="static/styles/8-places.css" rel="stylesheet">
+{% endblock head %}
+{% block container %}
+<section class="filters">
+    <div class="locations">
+        <h3>States</h3>
+        <h4>&nbsp;</h4>
+        <ul class="popover">
+            {% for state in states.values()|sort(attribute='name') %}
+            <li>
+                <h2>{{state.name}}:</h2>
+                <ul>
+                    {% for city in state.cities|sort(attribute='name') %}
+                    <li>{{city.name}}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="amenities">
+        <h3>Amenities</h3>
+        <h4>&nbsp;</h4>
+        <ul class="popover">
+            {% for amenity in amenities.values()|sort(attribute='name') %}
+            <li>{{amenity.name}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <button type="button">Search</button>
+</section> <!-- filters -->
+<section class="places">
+    <h1>Places</h1>
+    {% for place in places.values()|sort(attribute='name') %}
+    <article>
+        <h2>{{place.name}}</h2>
+        <div class="price_by_night">
+            <span>$80</span>
+        </div>
+        <div class="information">
+            <div class="max_guest">
+                <span>{{place.max_guest}} Guest</span>
+            </div>
+            <div class="number_rooms">
+                <span>{{place.number_rooms}} Bedroom</span>
+            </div>
+            <div class="number_bathrooms">
+                <span>{{place.number_bathrooms}} Bathroom</span>
+            </div>
+        </div>
+        <div class="user">
+            <strong>Owner:</strong>&nbsp;{{place.user.first_name}}&nbsp;{{place.user.last_name}}
+        </div>
+        <div class="description">{{place.description|safe}}</div>
+    </article>
+    {% endfor %}
+</section><!-- places -->
+{% endblock container %}
